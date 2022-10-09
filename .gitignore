@@ -44,3 +44,6 @@ node_modules
 
 # Ignore .env file
 .env
+
+# Ignore simplecov
+/coverage
