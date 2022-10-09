@@ -1,0 +1,23 @@
+ru:
+  activerecord:
+    attributes:
+      user:
+        id: ID
+        email: Почта
+        number: Табельный номер
+        password: Пароль
+        position: Должность
+        gender: Пол
+        admin: Признак администратора
+        branch: Филиал
+        railway: Железная дорога
+        workplace: Место работы
+      user/gender:
+        male: Мужчина
+        female: Женщина
+    errors:
+      models:
+        user:
+          attributes:
+            railway:
+              required: должна быть указана

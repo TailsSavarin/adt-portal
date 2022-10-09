@@ -1,0 +1,102 @@
+swagger.yaml:
+  openapi: 3.0.1
+  info:
+    title: API
+    version: 1.0
+    description: Описание запросов
+  paths: { }
+  schemes:
+    - http
+    - https
+  servers:
+    - url: http://localhost:{port}
+      description: Локальный сервер разработки
+      variables:
+        port:
+          default: 5100
+          description: Порт
+  components:
+    # Тело для запросов
+    schemas:
+      # Авторизация
+      auth:
+        type: object
+        properties:
+          login:
+            type: string
+            description: Логин
+            required: true
+          password:
+            type: string
+            description: Пароль
+            required: true
+      # Пользователь
+      user:
+        type: object
+        properties:
+          email:
+            type: string
+            description: Почта
+          login:
+            type: string
+            description: Логин
+          password:
+            type: string
+            description: Пароль
+          first_name:
+            type: string
+            description: Имя
+          last_name:
+            type: string
+            description: Фамилия
+          middle_name:
+            type: string
+            description: Отчество
+          location:
+            type: string
+            description: Локация
+          phone:
+            type: string
+            description: Телефон
+          telegram:
+            type: string
+            description: Телеграм
+          birthday:
+            type: string
+            description: День рождения
+          position:
+            type: string
+            description: Должность
+          bio:
+            type: string
+            description: О себе
+      # Создание письма для восстановления пароля
+      reset_password_email:
+        type: object
+        properties:
+          email:
+            type: string
+            required: true
+      reset_password:
+        type: object
+        properties:
+          password:
+            type: string
+            required: true
+          password_confirmation:
+            type: string
+            required: true
+    # Авторизация (Токен)
+    securitySchemes:
+      Bearer:
+        description: Токен пользователя
+        type: apiKey
+        name: Authorization
+        bearerFormat: JWT
+        in: header
+      Refresh:
+        description: Токен сброса
+        type: apiKey
+        name: X-Refresh-Token
+        bearerFormat: JWT
+        in: header

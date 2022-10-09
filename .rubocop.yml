@@ -1,0 +1,25 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-rspec
+
+Rails:
+  Enabled: true
+
+Performance:
+  Enabled: true
+
+RSpec:
+  Enabled: true
+
+AllCops:
+  TargetRubyVersion: 3.1.2
+  NewCops: enable
+  Exclude:
+    - tmp/*
+    - bin/*
+    - db/schema.rb
+    - vendor/**/*
+
+Style/Documentation:
+  Enabled: false

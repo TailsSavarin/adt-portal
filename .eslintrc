@@ -1,0 +1,85 @@
+{
+  "env": { "es6": true, "browser": true, "node": true },
+
+  "ignorePatterns": ["coverage", "public", "package-lock.json"],
+
+  "extends": [
+      "eslint:recommended",
+      "plugin:import/recommended",
+      "plugin:vue/vue3-strongly-recommended"
+  ],
+
+  "plugins": ["import", "vue"],
+
+  "settings": { "import/resolver": { "node": { "extensions": [".js", ".vue"] } } },
+
+  "rules": {
+    "vue/max-attributes-per-line": ["error", { "singleline": { "max": 6 }, "multiline": { "max": 1 } }],
+    "vue/html-self-closing": ["error", { "html": { "normal": "never", "void": "always" } }],
+    "vue/html-button-has-type": ["error"],
+    "vue/component-tags-order": ["error", { "order": ["template", "script", "style"] }],
+    "vue/component-name-in-template-casing": [
+        "error",
+        "PascalCase",
+        { "ignores": ["/^v-/", "/^router-/"], "registeredComponentsOnly": false }
+    ],
+    "vue/component-options-name-casing": ["error", "PascalCase"],
+    "vue/component-api-style": ["error", ["script-setup"]],
+    "vue/custom-event-name-casing": ["error", "camelCase"],
+    "vue/define-macros-order": ["error", { "order": ["defineProps", "defineEmits"] }],
+    "vue/padding-line-between-blocks": ["error", "always"],
+    "vue/block-tag-newline": ["error", { "singleline": "always", "multiline": "always" }],
+    "vue/new-line-between-multi-line-property": ["error"],
+    "vue/no-empty-component-block": ["error"],
+    "vue/no-static-inline-styles": ["error"],
+    "vue/no-template-target-blank": ["error"],
+    "vue/eqeqeq": ["error"],
+    "vue/no-multiple-slot-args": ["error"],
+    "vue/this-in-template": ["error"],
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/attribute-hyphenation": "off",
+    "vue/v-on-event-hyphenation": "off",
+
+    "array-bracket-spacing": ["error", "never"],
+    "brace-style": ["error", "1tbs"],
+    "block-spacing": ["error", "always"],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "comma-style": ["error", "last"],
+    "comma-dangle": ["error", "only-multiline"],
+    "curly": ["error", "multi-line"],
+    "no-debugger": "error",
+    "no-console": ["error"],
+    "no-empty": "off",
+    "no-cond-assign": ["error", "always"],
+    "semi": "error",
+    "func-call-spacing": ["off", "never"],
+    "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
+    "object-curly-spacing": ["error", "always"],
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxBOF": 0, "maxEOF": 1 }],
+    "no-var": "error",
+    "complexity": ["error", 8],
+    "no-case-declarations": "error",
+    "no-multi-spaces": "error",
+    "no-multi-str": "error",
+    "no-with": "error",
+    "no-void": "error",
+
+    "import/order": "error",
+    "import/first": "error",
+    "import/no-mutable-exports": "error",
+    "import/no-unresolved": "off",
+
+    "max-len": [
+        "error",
+      {
+        "code": 120,
+        "ignoreUrls": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreComments": true,
+        "ignoreStrings": true,
+        "ignoreRegExpLiterals": true,
+        "ignorePattern": "<rect|path|ellipse([\\s\\S]*?)/>"
+      }
+    ]
+  }
+}

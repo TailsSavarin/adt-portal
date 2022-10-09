@@ -1,0 +1,288 @@
+---
+openapi: 3.0.1
+info:
+  title: API
+  version: 1.0
+  description: Описание запросов
+paths:
+  "/api/passwords":
+    post:
+      summary: Отправка письма для восстановления пароля
+      tags:
+      - Восстановление пароля
+      parameters: []
+      responses:
+        '200':
+          description: письмо для восстановления пароля отправлено с поиском через
+            токен
+        '404':
+          description: пользователь не найден
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/reset_password_email"
+  "/api/passwords/{token}":
+    get:
+      summary: Проверка токена для восстановления пароля
+      tags:
+      - Восстановление пароля
+      parameters:
+      - name: token
+        in: path
+        required: true
+        description: Токен для восстановления пароля
+        schema:
+          type: string
+      responses:
+        '200':
+          description: валидный токен
+        '404':
+          description: токен не найден
+        '422':
+          description: просроченный токен
+    put:
+      summary: Восстановление пароля
+      tags:
+      - Восстановление пароля
+      parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: пароль обновлен
+        '422':
+          description: просроченный токен
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/reset_password"
+  "/api/session":
+    post:
+      summary: Создание сессии
+      tags:
+      - Сессия
+      parameters: []
+      responses:
+        '200':
+          description: сессия успешно создана
+        '422':
+          description: неверный пароль
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/auth"
+    put:
+      summary: Обновление токена
+      tags:
+      - Сессия
+      parameters:
+      - in: header
+        name: X-Refresh-Token
+        required: true
+        description: Токен сброса
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Access токен обновлен
+        '403':
+          description: Срок действия рефреш токена истек
+  "/api/user/session":
+    get:
+      summary: Получение текущего пользователя
+      tags:
+      - Пользователь - Сессия
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: пользователя успешно получен
+    delete:
+      summary: Удаление сессии
+      tags:
+      - Пользователь - Сессия
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: сессия удалена
+  "/api/user/users":
+    get:
+      summary: Список пользователей
+      tags:
+      - Пользователь
+      security:
+      - Bearer: {}
+      parameters:
+      - name: id
+        in: query
+        required: false
+        description: ID элемента
+        schema:
+          type: integer
+      - name: search
+        in: query
+        required: false
+        description: 'Поиск по полям: email login first_name last_name middle_name'
+        schema:
+          type: string
+      - name: sort_dir
+        in: query
+        required: false
+        default:
+        example:
+        - asc
+        - desc
+        description: Направление сортировки
+        schema:
+          type: string
+      - name: sort_col
+        in: query
+        required: false
+        default:
+        example:
+        - id
+        description: Название поля для сортировки
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        description: Номер нужной страници
+      - name: items
+        in: query
+        required: false
+        description: Кол-во элементов отображаемых на странице
+      responses:
+        '200':
+          description: список пользователей получен
+  "/api/user/users/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      description: ID пользователя
+      schema:
+        type: string
+    get:
+      summary: Получение пользователя
+      tags:
+      - Пользователь
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: пользователь получен
+    put:
+      summary: Редактирование пользователя
+      tags:
+      - Пользователь
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '200':
+          description: пользователь отредактирован
+        '422':
+          description: ошибка при редактирование пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/user"
+schemes:
+- http
+- https
+servers:
+- url: http://localhost:{port}
+  description: Локальный сервер разработки
+  variables:
+    port:
+      default: 5100
+      description: Порт
+components:
+  schemas:
+    auth:
+      type: object
+      properties:
+        login:
+          type: string
+          description: Логин
+          required: true
+        password:
+          type: string
+          description: Пароль
+          required: true
+    user:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Почта
+        login:
+          type: string
+          description: Логин
+        password:
+          type: string
+          description: Пароль
+        first_name:
+          type: string
+          description: Имя
+        last_name:
+          type: string
+          description: Фамилия
+        middle_name:
+          type: string
+          description: Отчество
+        location:
+          type: string
+          description: Локация
+        phone:
+          type: string
+          description: Телефон
+        telegram:
+          type: string
+          description: Телеграм
+        birthday:
+          type: string
+          description: День рождения
+        position:
+          type: string
+          description: Должность
+        bio:
+          type: string
+          description: О себе
+    reset_password_email:
+      type: object
+      properties:
+        email:
+          type: string
+          required: true
+    reset_password:
+      type: object
+      properties:
+        password:
+          type: string
+          required: true
+        password_confirmation:
+          type: string
+          required: true
+  securitySchemes:
+    Bearer:
+      description: Токен пользователя
+      type: apiKey
+      name: Authorization
+      bearerFormat: JWT
+      in: header
+    Refresh:
+      description: Токен сброса
+      type: apiKey
+      name: X-Refresh-Token
+      bearerFormat: JWT
+      in: header
