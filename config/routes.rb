@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   end
 
   root 'home#index'
+  get '*path', to: 'home#index', constraints: ->(req) { req.path.exclude?('rails/active_storage') }
 end
