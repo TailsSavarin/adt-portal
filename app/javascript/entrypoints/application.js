@@ -1,8 +1,7 @@
 import { createApp } from 'vue';
 import App from '../App.vue';
-
-console.log('Vite ⚡️ Rails')
-console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify.app/guide/rails')
+import router from '@/router';
 
 const app = createApp(App);
+app.use(router);
 app.mount('#app');
