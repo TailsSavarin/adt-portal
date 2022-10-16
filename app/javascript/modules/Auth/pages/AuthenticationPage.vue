@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" @mousemove="playParallax">
     <div class="icon_one" name="img"></div>
     <div class="icon_two" name="img"></div>
     <div class="icon_three" name="img"></div>
@@ -14,30 +14,40 @@
     <div class="icon_twelve" name="img"></div>
     <div class="icon_thirteen" name="img"></div>
     <div class="icon_fourteen" name="img"></div>
-    <form @mousemove="playParallax">
+    <form @submit.prevent>
       <div class="logo"></div>
 
       <div>
         <label for="login" class="label">Логин</label>
-        <input type="text" name="login" id="" class="input">
+        <input v-model="login" type="text" name="login" class="input">
 
         <label for="password" class="label">Пароль</label>
-        <input type="text" name="password" id="" class="input">
+        <input v-model="password" type="password" name="password" class="input">
         <p class="text">Забыли пароль?</p>
       </div>
 
-      <button class="btn">Войти</button>
+      <!-- <button class="btn" @click="$router.push('/main')">Войти</button> -->
+      <MyButton>gggg</MyButton>
+      <button class="btn" @click="handleSubmit">Войти</button>
     </form>
   </div>
 </template>
 
 <script>
 import {useRoute, useRouter} from 'vue-router';
-
+import axios from 'axios'
+import MyButton from '@/components/UI/MyButton.vue'
 const router = useRouter();
 const route = useRoute();
 
 export default {
+
+  data(){
+    return{
+      login:'',
+      password:'',
+    }
+  },
   methods: {
     playParallax(e) {
       const imagePlx = document.getElementsByName("img");
@@ -51,20 +61,29 @@ export default {
         }
       }
 
-    }
+    },
+      async handleSubmit(){
+        try{
+          const response = await axios.post('/api/session',{
+          login: this.login,
+          password:this.password
+        });
+        console.log(response)
+        localStorage.setItem('token', response.data.token)}
+        catch(e){
+          console.log(e)
+        }
+
+        this.$router.push('/main')
+      }
+      
   }
+
 }
 </script>
 
-<style>
-* {
-  margin: 0 auto;
-  padding: 0;
-  box-sizing: border-box;
-  transition: 0.2s ease;
-  font: 500 14px/ 17px 'Montserrat';
+<style scoped>
 
-}
 
 .wrapper {
   width: 100%;
