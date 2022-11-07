@@ -12,7 +12,7 @@
         <my-input v-model="password" type="password" name="password" class="input"/>
         <p class="wrong" v-if="error">{{error}}</p>
         <p class="text" @click="forgotPassword" style="cursor: pointer;">Забыли пароль?</p>
-        
+
       </div>
      <my-button @click="handleSubmit">Войти</my-button>
 
@@ -24,7 +24,7 @@
 
         <div class="toBack" @click="this.passwordRecovery = false; this.formShow = true">
                     <div class="arrow">назад</div>
-        </div>   
+        </div>
         <label for="email" class="label">Ваша рабочая почта</label>
         <my-input v-model="email" type="text" name="email" class="input"/>
         <my-button class="btn_2">Запросить</my-button>
@@ -53,7 +53,7 @@ export default {
     MyInput,
     MyForm
   },
- 
+
   data(){
     return{
       login:'',
@@ -89,24 +89,24 @@ export default {
           password:this.password
         });
         console.log(response)
-        localStorage.setItem('token', response.data.csrf)
+        localStorage.setItem('token', response.data.access)
 
         if (localStorage.getItem('token')){
           this.$router.push('/');
-        } 
-          
-        
-      
+        }
+
+
+
       }
-        
+
         catch({response}){
 
           this.error = response.data.error
         }
 
-        
+
       }
-      
+
   }
 
 }

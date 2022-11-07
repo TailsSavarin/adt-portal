@@ -71,7 +71,7 @@ RSpec.describe Api::SessionsController, type: :request do
       response 403, 'Срок действия рефреш токена истек' do
         let!(:'X-Refresh-Token') { token_for(user)[:refresh] } # rubocop:disable RSpec/VariableName, RSpec/LetSetup
 
-        before { travel_to 1.month.after }
+        before { travel_to 2.month.after }
 
         after { travel_back } # rubocop:disable Rails/RedundantTravelBack
 
