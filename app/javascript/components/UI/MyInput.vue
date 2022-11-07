@@ -1,5 +1,7 @@
-<!-- <template>
-    <input :value="modelValue" @input="updateInput" class="input" type="text">
+<template>
+    <input :value="modelValue" @input="updateInput" class="input" type="text"
+    >
+
   </template>
   
   <script>
@@ -17,10 +19,13 @@
   </script>
   
   <style scoped>
-  .input {
-    width: 100%;
-    border: 1px solid teal;
-    padding: 10px 15px;
-    margin-top: 15px;
-  }
-  </style> -->
+ .input {
+  width: 100%;
+  border: 1px solid #F0EFF2;
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin: 15px 0;
+
+}
+
+  </style>

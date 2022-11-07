@@ -2,12 +2,15 @@ export const auth = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/modules/Auth/pages/AuthenticationPage.vue')
+  
+    component: () => import('@/modules/Auth/pages/AuthenticationPage.vue'),
+
   },
   {
-    path: '/main',
+    path: '/',
     name: 'Main',
-    component: () => import('@/modules/Auth/pages/Main.vue')   
+    component: () => import('@/modules/Auth/pages/Main.vue'),
+    meta: { requiresAuth: true }   
   },
   {
     path: '/profile',
@@ -20,3 +23,4 @@ export const auth = [
     component: () => import('@/modules/Auth/pages/EditPage.vue')   
   }
 ]
+

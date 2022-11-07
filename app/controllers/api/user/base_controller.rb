@@ -10,6 +10,7 @@ module Api
       private
 
       def not_authorized
+        binding.pry
         render_error(I18n.t('api.base.errors.not_authorized'), status: :unauthorized)
       end
 

@@ -135,7 +135,7 @@ paths:
       - name: sort_dir
         in: query
         required: false
-        default:
+        default: 
         example:
         - asc
         - desc
@@ -145,7 +145,7 @@ paths:
       - name: sort_col
         in: query
         required: false
-        default:
+        default: 
         example:
         - id
         description: Название поля для сортировки
