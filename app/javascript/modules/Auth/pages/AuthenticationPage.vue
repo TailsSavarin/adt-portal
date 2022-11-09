@@ -4,17 +4,22 @@
     <my-form @submit.prevent v-if="formShow">
       <div class="logo"></div>
 
-      <div>
+      <div style="margin:0">
         <label for="login" class="label">Логин</label>
-        <my-input v-model="login" type="text" name="login" class="input"/>
+        <my-input v-model="login" type="text" name="login" class="input" @input="inputUpdate"/>
 
-        <label for="password" class="label">Пароль</label>
-        <my-input v-model="password" type="password" name="password" class="input"/>
+        <div class="blockPassword">
+          <label for="password" class="label">Пароль</label>
+          <my-input v-model="password" type="password" name="password" class="input" id="password" />
+          <div class="passwordVis" @click="passwordVis"></div>
+        </div>
+
+
         <p class="wrong" v-if="error">{{error}}</p>
         <p class="text" @click="forgotPassword" style="cursor: pointer;">Забыли пароль?</p>
 
       </div>
-     <my-button @click="handleSubmit">Войти</my-button>
+     <my-button @click="handleSubmit" id="btn">Войти</my-button>
 
 
     </my-form>
@@ -22,12 +27,12 @@
       <div>
         <div class="logo"></div>
 
-        <div class="toBack" @click="this.passwordRecovery = false; this.formShow = true">
+        <div class="toBack" @click="this.passwordRecovery = false; this.formShow = true; this.login= null;this.password=null">
                     <div class="arrow">назад</div>
         </div>
         <label for="email" class="label">Ваша рабочая почта</label>
-        <my-input v-model="email" type="text" name="email" class="input"/>
-        <my-button class="btn_2">Запросить</my-button>
+        <my-input v-model="email" type="text" name="email" class="input" @input="inputUpdate"/>
+        <my-button @click="getPassword" id="btn">Запросить</my-button>
      </div>
     </my-form>
   </div>
@@ -94,20 +99,53 @@ export default {
         if (localStorage.getItem('token')){
           this.$router.push('/');
         }
-
-
-
       }
 
         catch({response}){
 
           this.error = response.data.error
         }
+      },
+      async getPassword(){
+        try{
+          const response = await axios.post('/api/passwords',{
+            email: this.email
+          })
+          console.log(response)
+        }
+        catch(e){
+          console.error(e)
+        }
+        
+      },
+      passwordVis(){
+
+        password.type = 'password' ? password.type = 'text' :  password.type = 'text' ? password.type = 'password' : password.type = 'text' // почему не работает????
+
+      },
+      inputUpdate(event){
+        var len = event.target.value
+
+        if (len.length > 0 ){
+          
+           if ( this.password || this.login || this.email){
+            btn.classList.add('btn-blue')
+            
+          }
 
 
-      }
+        }
+        else{
+            btn.classList.remove('btn-blue')
+          }
+        
+          
+        },
+        
+       
+        
+      },
 
-  }
 
 }
 </script>
@@ -167,5 +205,18 @@ export default {
   color: rgba(206, 7, 7, 0.808);
 font-style: italic;
 }
-
+.blockPassword{
+  position: relative;
+}
+.passwordVis{
+  background-image: url('../../../assets/img/eye.svg');
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 10px;
+  bottom: 22px;
+}
+.btn-blue{
+  background: #4256F6;
+}
 </style>

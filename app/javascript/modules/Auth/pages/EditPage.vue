@@ -9,16 +9,16 @@
                     <div style="margin-right:20px">
                         <div class="input-cont">
                            <label class="label" for="first_name">Имя</label>
-                        <my-input v-model="first_name" class="input" type="text" name="first_name"  @input="updateInput"/>
-                        <div class="cross" v-if="crossVis" @click="deleteTextOne" ></div> 
+                        <my-input v-model="first_name" class="input" id="inputName" type="text" name="first_name" @input="updateInputName" />
+                        <div class="cross" v-if="crossVisName" @click="deleteTextOne" ></div> 
                         </div>
                         
                     </div>
                     <div>
                         <div class="input-cont">
                             <label class="label" for="middle_name">Отчество</label>
-                            <my-input v-model="middle_name" class="input" type="text" name="middle_name" @input="updateInput"/>
-                            <div class="cross" v-if="crossVis" @click="deleteTextTwo" ></div>                            
+                            <my-input v-model="middle_name" class="input" id="inputMiddleName" type="text" name="middle_name" @input="updateInputMiddleName"/>
+                            <div class="cross" v-if="crossVisMiddleName" @click="deleteTextTwo" ></div>                            
                         </div>
 
                     </div>
@@ -26,25 +26,25 @@
                  </div>
                  <div class="input-cont">
                     <label class="label" for="last_name"> Фамилия</label>
-                    <my-input v-model="last_name" class="input" type="text" name="last_name" @input="updateInput"/>
-                    <div class="cross" v-if="crossVis" @click="deleteTextThree" ></div>
+                    <my-input v-model="last_name" class="input" type="text" id="inputLastName" name="last_name" @input="updateInputLastName"/>
+                    <div class="cross" v-if="crossVisLastName" @click="deleteTextThree" ></div>
                  </div>
                  
                  <div class="input-cont">
                     <label class="label" for="location">Локация</label>
-                    <my-input v-model="location" class="input" type="text" name="location" @input="updateInput" />   
-                    <div class="cross" v-if="crossVis" @click="deleteTextFour" ></div>
+                    <my-input v-model="location" class="input" type="text" id="inputLocation" name="location" @input="updateInputLocation" />   
+                    <div class="cross" v-if="crossVisLocation" @click="deleteTextFour" ></div>
                  </div>
 
                  <div class="input-cont">
                     <label class="label" for="phone"> Телефон</label>
-                    <my-input v-model="phone" class="input" type="text" name="phone" @input="updateInput"/>
-                    <div class="cross" v-if="crossVis" @click="deleteTextFive" ></div>
+                    <my-input v-model="phone" class="input" type="text" id="inputPhone" name="phone" @input="updateInputPhone"/>
+                    <div class="cross" v-if="crossVisPhone" @click="deleteTextFive" ></div>
                  </div>
                  <div class="input-cont">
                     <label class="label" for="telegram">Telegram</label>
-                    <my-input v-model="telegram" class="input" type="tel" name="telegram"  @input="updateInput"/>
-                    <div class="cross" v-if="crossVis" @click="deleteTextSix" ></div>                    
+                    <my-input v-model="telegram" class="input" type="tel" id="inputTelegram" name="telegram"  @input="updateInputTelegram"/>
+                    <div class="cross" v-if="crossVisTelegram" @click="deleteTextSix" ></div>                    
                  </div>
 
             </form>
@@ -54,11 +54,11 @@
                  <div style="display:flex;">
                     <div style="margin-right:20px">
                         <label class="label" for="password">Пароль</label>
-                        <my-input v-model="password" class="input" type="password" name="password"/>
+                        <my-input v-model="password" class="input" type="password" name="password" id="password"/>
                     </div>
                     <div>
-                        <label class="label" for="password">Повторите пароль</label>
-                        <my-input v-model="password" class="input" type="password" name="password"/>
+                        <label class="label" for="passwordRepeat">Повторите пароль</label>
+                        <my-input v-model="passwordRepeat" class="input" type="password" name="passwordRepeat" id="passwordRepeat"/>
                     </div>
 
                  </div>                
@@ -78,15 +78,23 @@
         </div>
         <div>
             <div class="container_three"> 
-            <h2>Аватар</h2>
-                <div>
+            
+
                     <form enctype="multipart/form-data" method="post">
-                    <p><input type="file" name="photo" multiple accept="image/*,image/jpeg">
-                    <!-- <input type="submit" value="Поменять"> -->
-                </p>
+                   <div class="blockFlex">
+                    <h2 style="display:inline-block; margin:0">Аватар</h2>
+                    
+                    <div class="blockPhoto">
+                    <label class ="labelImg" for="file">Поменять</label>
+                    <input type="file" id="file" style="visibility:hidden;width: 0; overflow: hidden;" name="photo" multiple accept="image/*,image/jpeg">
+                    
+                    </div>
+                   </div> 
+                    <div class="imgEdit"></div>
+                
                     </form>
 
-                </div>                    
+                                 
             
             </div>       
       
@@ -95,7 +103,7 @@
 
     </div>
         
-        <my-button class="btn" @click="saveСhange">Сохранить</my-button>
+        <my-button class="btn" @click="saveСhange" id="btn">Сохранить</my-button>
         <!-- <span class="back" @click="$router.push('/profile')">Назад</span> -->
 
         <div class="back" @click="$router.push('/profile')">
@@ -117,105 +125,197 @@ export default{
     },
     data(){
         return{
-            crossVis: false,
-            first_name:'',
-            middle_name:'',
-            last_name:'',
-            location:'',
-            telegram:'',
-            phone:'',
-            password:'',
-            birthday:'',
-            position:'',
-            bio:''
+            crossVisName: true,
+            crossVisLastName: true,
+            crossVisMiddleName : true,
+            crossVisLocation : true,
+            crossVisPhone : true,
+            crossVisTelegram: true,
+            first_name:null,
+            middle_name:null,
+            last_name: null,
+            location:null,
+            telegram:null,
+            phone:null,
+            password:null,
+            passwordRepeat:null,
+            birthday:null,
+            position:null,
+            bio:null,
+            user:null,
+            id:null,
 
         }
     },
     methods:{
         deleteTextOne(){
             this.first_name = ''
+            this.crossVisName = false
+            btn.classList.remove('btn-blue')
         },
         deleteTextTwo(){
             this.middle_name = ''
+            this.crossVisMiddleName = false
+            btn.classList.remove('btn-blue')
         },
         deleteTextThree(){
             this.last_name = ''
+            this.crossVisLastName= false
+            btn.classList.remove('btn-blue')
         },
         deleteTextFour(){
             this.location = ''
+            this.crossVisLocation = false
+            btn.classList.remove('btn-blue')
         },
         deleteTextFive(){
             this.phone = ''
+            this.crossVisPhone = false
+            btn.classList.remove('btn-blue')
         },
         deleteTextSix(){
             this.telegram = ''
+            this.crossVisTelegram = false
+            btn.classList.remove('btn-blue')
         },
-        updateInput(event){
+        updateInputName(event){
             var len = event.target.value
+            console.log(len)
             if (len.length > 0){
-                this.crossVis = true
+                this.crossVisName= true
+                btn.classList.add('btn-blue')
             }
             else {
-                this.crossVis = false
+                this.crossVisName = false
+                
+
+            }
+        },
+        updateInputLastName(event){
+            var len = event.target.value
+            if (len.length > 0){
+                this.crossVisLastName = true
+                btn.classList.add('btn-blue')
+            }
+            else {
+                this.crossVisLastName= false
+
+            }
+        },
+        updateInputMiddleName(event){
+            var len = event.target.value
+            if (len.length > 0){
+                this.crossVisMiddleName = true
+                btn.classList.add('btn-blue')
+            }
+            else {
+                this.crossVisMiddleName = false
+
+            }
+        },
+        updateInputLocation(event){
+            var len = event.target.value
+            if (len.length > 0){
+                this.crossVisLocation = true
+                btn.classList.add('btn-blue')
+            }
+            else {
+                this.crossVisLocation = false
+
+            }
+        },
+        updateInputPhone(event){
+            var len = event.target.value
+            if (len.length > 0){
+                this.crossVisPhone = true
+                btn.classList.add('btn-blue')
+            }
+            else {
+                this.crossVisPhone = false
+
+            }
+        },
+        updateInputTelegram(event){
+            var len = event.target.value
+            if (len.length > 0){
+                this.crossVisTelegram = true
+                btn.classList.add('btn-blue')
+            }
+            else {
+                this.crossVisTelegram = false
 
             }
         },
 
             async saveСhange(){
-                try{
-                    const response = await axios.put('/api/user/users/{id}',{
-                        first_name : this.first_name,
-                        middle_name : this.middle_name,
-                        last_name : this.last_name,
-                        location : this.location,
-                        phone : this.phone,
-                        telegram: this.telegram,
-                        password: this.password,
-                        birthday: this.birthday,
-                        position: this.position,
-                        bio: this.bio
+                if (this.password == this.passwordRepeat){
+                    try{
                         
-                });
-                console.log(response)
-                }
+                        const test = await axios.put(`/api/user/users/${this.id}`,{
+                            headers:{
+                                Authorization: localStorage.getItem('token')
+                            },
+                            // first_name : this.first_name,
+                            // middle_name : this.middle_name,
+                            // last_name : this.last_name,
+                            // location : this.location,
+                            // phone : this.phone,
+                            // telegram: this.telegram,
+                            // password: this.password,
+                            // birthday: this.birthday,
+                            // position: this.position,
+                            // bio: this.bio
+                            
+                        });
+                        console.log(test)
+                    }
                 
-                catch(e){
-                    console.error(e)
+                    catch(e){
+                        console.error(e)
+                    } 
                 }
+                else{
+                    password.style.boxShadow = '0 0 3px red'
+                    passwordRepeat.style.boxShadow = '0 0 3px red'
+                }
+
 
         
       
         },
-                // saveСhange(){
-            // const name = this.name;
-            // const patronymic = this.patronymic;
-            // const surname = this.surname;
-            // const location = this.location;
-            // const telephone = this.telephone;
-            // const telegram = this.telegram;
-            // const password = this.password;
-            // const baseInformation = {
-            //     name : this.name,
-            //     patronymic : this.patronymic,
-            //     surname : this.surname,
-            //     location : this.location,
-            //     telephone : this.telephone,
-            //     password: this.password
-            // }
-    },
-    mounted() {
-        (async()=>{
-            try{
-            const inf = await axios.get('/api/user/users/{id}');
-                console.log(inf)
-            }
-            catch(e){
-                console.error(e)
-            }
-      
-      })()
 
     },
+    mounted(){
+
+        (async()=>{
+            try{
+                const response = await axios.get('/api/user/session',{
+                headers:{
+                    Authorization: localStorage.getItem('token')
+                }
+                });
+                this.user = response.data
+                this.id=response.data.id
+                
+                inputName.value = this.user?.first_name 
+                inputMiddleName.value = this.user?.middle_name 
+                inputLastName.value = this.user?.last_name 
+                inputLocation.value = this.user?.location 
+                inputPhone.value = this.user?.phone 
+                inputTelegram.value = this.user?.telegram 
+                password.value = this.user?.password
+                passwordRepeat.value = this.user?.password
+
+                
+
+               
+            }
+            
+            catch(e){
+            console.error(e)
+            }
+        })()
+}
 }
 </script>
 <style scoped>
@@ -284,7 +384,7 @@ h2{
 
     min-height: 350px;
     min-width: 418px;
-    padding: 40px;
+    padding: 20px 40px 40px 30px;
     min-height: 252px;
     background: #F5F6F7;
     border-radius: 20px;
@@ -334,4 +434,30 @@ h2{
 .input-cont{
  position: relative; 
 }
+.blockFlex{
+    display: flex;
+    justify-content: space-between;
+}
+.imgEdit{
+    background: url('../../../assets/img/avatar.png') 100% 100% / cover;
+    width: 371px;
+    height: 371px;
+
+}
+.labelImg{
+    padding: 0;
+    margin: 0;
+    display: inline;
+    font: 500 16px / 27px 'Montserrat';
+    color: #033A92;
+
+}
+.blockPhoto{
+    display: inline;
+    margin:0
+}
+.btn-blue{
+  background: #4256F6;
+}
+
 </style>

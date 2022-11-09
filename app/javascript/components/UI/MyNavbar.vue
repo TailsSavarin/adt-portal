@@ -21,17 +21,16 @@
     name: 'my-navbar',
     mounted() {
       (() => {
-      const currentUrl = window.location.href;
-      console.log(currentUrl)
-      if(currentUrl == 'http://localhost:5100/profile'){
+      const currentUrl = window.location.pathname;
+      if(currentUrl == '/profile'){
         myProfile.style.borderBottom= '3px solid #033A92'
       }
 
-      if(currentUrl == 'http://localhost:5100/editpage'){
+      if(currentUrl == '/editpage'){
         myProfile.style.borderBottom= '3px solid #033A92'
       }     
 
-      if(currentUrl == 'http://localhost:5100/'){
+      if(currentUrl == '/'){
         request.style.borderBottom= '3px solid #033A92'
       }
       

@@ -9,11 +9,11 @@
             </div>
             <div class="photo"></div>
             <div style="text-align:left">
-                <p class="text_orange">Frontend-разработчик</p>
-                <p class="textB">Иванова Элина Евгеньевна</p>
-                <p class="text_normal">elina@nasa.moon</p>
-                <a href="tel:+96 558 441 598" class="text_normal">+96 558 441 598</a><br>
-                <a href="#" class="text_normal">Telegram: @elinaI</a>
+                <p class="text_orange">{{user?.position}}</p>
+                <p class="textB">{{user?.last_name}} {{user?.first_name}} {{user?.middle_name}}</p>
+                <p class="text_normal">{{user?.email}}</p>
+                <a href="#" class="text_normal">{{user?.phone}}</a><br>
+                <a href="#" class="text_normal">Telegram: {{user?.telegram}}</a>
             
             </div>
 
@@ -23,9 +23,9 @@
         <div class="container_two">
             <p class="textB">BIO</p>
             <p class="text_h2">День рождения</p>
-            <p class="text_normal">6 июня</p>
+            <p class="text_normal">{{user?.birthday}}</p>
             <p class="text_h2">О себе</p>
-            <p class="text_normal">Чёрная окраска пантер является проявлением меланизма, вызванного мутацией гена[1]. Примером сильного распространения мутации, которая приводит к меланизму, в популяции кошачьих, является популяция леопарда на территории Малайзии, где около 50 % животных имеют чёрную окраску. Вообще среди больших кошек меланизм обычно является более распространённым в тех популяциях, которые живут в плотных лесах — при условии недостатка освещения тёмные животные здесь являются менее заметными, чем на открытой местности, что облегчает им выживание.</p>
+            <p class="text_normal">{{user?.bio}}</p>
         </div>
         <div>
             <div class="container_three"> 
@@ -36,7 +36,7 @@
                     <p class="text_h2">Согласованная локация</p>
                     <p>Удаленная работа</p>
                     <p class="text_h2">Локация</p>
-                    <p>Париж</p>
+                    <p>{{user?.location}}</p>
                 </div>
                 <div>
 
@@ -44,8 +44,14 @@
             
             </div>       
             <div class="btn_container">
-                <button class="btn text_h2" @click="$router.push('/editpage')" style="cursor: pointer;">Редактировать</button>
-                <button class="btn text_h2" @click="$router.push('/login')" style="cursor: pointer;"> Выйти</button>  
+                <div class="blockButton">
+                    <button class ="btn text_h2" @click="$router.push('/editpage')" style="cursor: pointer;">Редактировать</button>
+                    <div class = "editPage"></div>
+                </div>
+                <div class ="blockButton">
+                    <button class="btn text_h2" @click="$router.push('/login')" style="cursor: pointer;"> Выйти</button>
+                    <div class = "exit"></div>
+                </div>
             </div>       
         </div>
 
@@ -54,10 +60,34 @@
 
 <script>
 import MyNavbar from '@/components/UI/MyNavbar.vue'
+import axios from 'axios'
 export default{
     components:{
         MyNavbar
+    },
+    data(){
+        return{
+            user: null
+        }
+    },
+    mounted(){
+
+        (async()=>{
+            try{
+                const response = await axios.get('/api/user/session',{
+                  headers:{
+                      Authorization: localStorage.getItem('token')
+                  }
+                });
+                this.user = response.data
+            }
+            
+            catch(e){
+            console.error(e)
+            }
+        })()
     }
+
 }
 </script>
 <style scoped>
@@ -85,13 +115,15 @@ export default{
 .btn_container{
     width: 418px;
     margin:20px 0;
+    display: flex;
+    justify-content: space-between;
 }
 .btn{
-    margin: 30px 30px 30px 0;
+    margin: 10px 0 30px 0;
     background: #F5F6F7;
     border-radius: 20px;
     border:none;
-    padding: 40px;
+    padding: 30px 60px;
     max-width: 243px;
     min-height: 72px;
 
@@ -129,9 +161,9 @@ export default{
 .container_one{
     width: 419px;
     height: 584px;
+    margin: 0 auto;
     background: #F5F6F7;
     border-radius: 20px;
-    padding:40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -150,15 +182,36 @@ export default{
     min-height: 400px;
     background: #F5F6F7;
     border-radius: 20px;
-    padding: 40px;
+    padding: 10px 40px 40px 30px;
 }
 .container_three{
 
     min-height: 350px;
     min-width: 418px;
-    padding: 40px;
+    padding: 10px 40px 20px 30px;
     min-height: 252px;
     background: #F5F6F7;
     border-radius: 20px;
+}
+.blockButton{
+    margin: 0;
+    display: inline;
+    position: relative;
+}
+.editPage{
+    background-image: url('../../../assets/img/Edit.svg');
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top:37px;
+    left:20px;
+}
+.exit{
+    background-image: url('../../../assets/img/Exit.svg');
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top:37px;
+    left:20px;
 }
 </style>

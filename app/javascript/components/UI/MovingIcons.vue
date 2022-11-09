@@ -20,6 +20,7 @@
   }
 </script>
 <style scoped>
+
 .icon_one {
   background-image: url('../../../assets/img/Icon-1.svg');
   width: 111.46px;

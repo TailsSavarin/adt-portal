@@ -14,7 +14,7 @@
   .btn {
     min-width: 98px;
     min-height: 44px;
-    background: #BFD1DF;
+    background: #BFD1DF;;
     border: none;
     border-radius: 10px;
     color: white;
