@@ -10,8 +10,8 @@
 
         <div class="blockPassword">
           <label for="password" class="label">Пароль</label>
-          <my-input v-model="password" type="password" name="password" class="input" id="password" />
-          <div class="passwordVis" @click="passwordVis"></div>
+          <my-input v-model="password" :type="showPassword ? 'text' : 'password'" name="password" class="input" id="password" />
+          <div class="passwordVis" @click="showPassword = !showPassword"></div>
         </div>
 
 
@@ -66,7 +66,8 @@ export default {
       email:'',
       formShow:true,
       passwordRecovery:false,
-      error: null
+      error: null,
+      showPassword: false
     }
   },
   methods: {
@@ -116,21 +117,16 @@ export default {
         catch(e){
           console.error(e)
         }
-        
-      },
-      passwordVis(){
-
-        password.type = 'password' ? password.type = 'text' :  password.type = 'text' ? password.type = 'password' : password.type = 'text' // почему не работает????
 
       },
       inputUpdate(event){
         var len = event.target.value
 
         if (len.length > 0 ){
-          
+
            if ( this.password || this.login || this.email){
             btn.classList.add('btn-blue')
-            
+
           }
 
 
@@ -138,12 +134,12 @@ export default {
         else{
             btn.classList.remove('btn-blue')
           }
-        
-          
+
+
         },
-        
-       
-        
+
+
+
       },
 
 
