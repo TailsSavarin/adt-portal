@@ -22,7 +22,8 @@ RSpec.describe UserSerializer do
         updated_at: user.updated_at,
         first_name: user.first_name,
         middle_name: user.middle_name,
-        birthday: user.birthday.strftime('%d.%m.%Y')
+        birthday: user.birthday.strftime('%d.%m.%Y'),
+        avatar: nil
       }
     )
   end

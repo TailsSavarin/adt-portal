@@ -2,13 +2,7 @@
 
 require 'simplecov'
 
-SimpleCov.start('rails') do
-  add_filter 'app/channels/application_cable/channel.rb'
-  add_filter 'app/channels/application_cable/connection.rb'
-  add_filter 'app/mailers/application_mailer.rb'
-  add_group 'Serializers', 'app/serializers'
-  add_group 'Queries', 'app/queries'
-end
+SimpleCov.start('rails')
 
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'

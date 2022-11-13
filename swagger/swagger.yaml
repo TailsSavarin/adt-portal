@@ -17,6 +17,13 @@ paths:
             токен
         '404':
           description: пользователь не найден
+          content:
+            application/json:
+              examples:
+                пользователь не найден:
+                  value:
+                    error: Токен не найден!
+                  summary: пользователь не найден
       requestBody:
         content:
           application/json:
@@ -39,8 +46,22 @@ paths:
           description: валидный токен
         '404':
           description: токен не найден
+          content:
+            application/json:
+              examples:
+                токен не найден:
+                  value:
+                    error: Токен не найден!
+                  summary: токен не найден
         '422':
           description: просроченный токен
+          content:
+            application/json:
+              examples:
+                просроченный токен:
+                  value:
+                    error: Срок действия токена истек!
+                  summary: просроченный токен
     put:
       summary: Восстановление пароля
       tags:
@@ -56,6 +77,13 @@ paths:
           description: пароль обновлен
         '422':
           description: просроченный токен
+          content:
+            application/json:
+              examples:
+                просроченный токен:
+                  value:
+                    error: Срок действия токена истек!
+                  summary: просроченный токен
       requestBody:
         content:
           application/json:
@@ -63,36 +91,70 @@ paths:
               "$ref": "#/components/schemas/reset_password"
   "/api/session":
     post:
-      summary: Создание сессии
+      summary: Создать сессию
       tags:
       - Сессия
       parameters: []
       responses:
         '200':
-          description: сессия успешно создана
+          description: Сессия создана
+          content:
+            application/json:
+              examples:
+                Сессия создана:
+                  value:
+                    csrf: 5DZh/cusKV5U5+1A3yzbb6H/0Yb4PsSp/7bQY66yFucyef08Vk0pufUD8uaSKa5/DAPuT7zfmuLm1OTHE1+9pw==
+                    access: eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Njg0NTA5NDYsInVzZXJfaWQiOjI1NSwidWlkIjoiNmQwZjM3ZjQtZWQ1Ni00MzBjLTg2N2UtZjc5MTUwMWJhY2Q0IiwicnVpZCI6IjgwMGI0MzA4LTI0OGItNGJlMS1hZmY1LTc2NjYwYmU5NGI1NiJ9.eJqmEn7T_JHoH4a09FLCV_-M_eAv6lfzCJgE-N6G54c
+                    access_expires_at: '2022-11-14T21:35:46.000+03:00'
+                    refresh: eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzA5OTQyOTIsInVzZXJfaWQiOjI1NSwidWlkIjoiODAwYjQzMDgtMjQ4Yi00YmUxLWFmZjUtNzY2NjBiZTk0YjU2In0.QhW6PI6DEZnh1XVb6smNFOaqrojorcK9gvrGFgX3oG8
+                    refresh_expires_at: '2022-12-14T08:04:52.000+03:00'
+                  summary: Сессия создана
         '422':
-          description: неверный пароль
+          description: Неверный пароль
+          content:
+            application/json:
+              examples:
+                Неверный пароль:
+                  value:
+                    error: Неверный логин или пароль!
+                  summary: Неверный пароль
       requestBody:
         content:
           application/json:
             schema:
               "$ref": "#/components/schemas/auth"
     put:
-      summary: Обновление токена
+      summary: Обновить токен
       tags:
       - Сессия
       parameters:
       - in: header
         name: X-Refresh-Token
         required: true
-        description: Токен сброса
+        description: Рефрешь токен
         schema:
           type: string
       responses:
         '200':
-          description: Access токен обновлен
+          description: Токен сессии обновлен
+          content:
+            application/json:
+              examples:
+                Токен сессии обновлен:
+                  value:
+                    csrf: 6D7VaLsuTNQ6NwhZMGVFfyAWevpf+ZhPUZf6sdNzWzVrlPepLwqm1C7YOSm5z+NZavFOTcYRWO3aspc0LoZ3Rg==
+                    access: eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Njg0NTA5NDYsInVzZXJfaWQiOjI1NywidWlkIjoiYjY5MjlhMmMtMjhhYi00MjBlLWFlY2UtY2QxYzdhNTVhMzY1In0.X-BmQ_O6bSYS_kVRWxtuoHTL8kHpaCt1nKDTaS_g0ms
+                    access_expires_at: '2022-11-14T21:35:46.000+03:00'
+                  summary: Токен сессии обновлен
         '403':
           description: Срок действия рефреш токена истек
+          content:
+            application/json:
+              examples:
+                Срок действия рефреш токена истек:
+                  value:
+                    error: Срок действия сессии истек!
+                  summary: Срок действия рефреш токена истек
   "/api/user/session":
     get:
       summary: Получение текущего пользователя
@@ -103,6 +165,31 @@ paths:
       responses:
         '200':
           description: пользователя успешно получен
+          content:
+            application/json:
+              examples:
+                пользователя успешно получен:
+                  value:
+                    id: 259
+                    avatar:
+                    bio: The orthogonal features, when combined, can explode into
+                      complexity.
+                    birthday: 16.06.1969
+                    created_at: '2022-11-13 18:35:46'
+                    email: robert.cartwright@schulist.io
+                    errors:
+                      full_messages: []
+                      messages: {}
+                    first_name: Арина
+                    last_name: Лапина
+                    location: Колумбия
+                    login: jeff
+                    middle_name: Яковлева
+                    phone: "+71172827495"
+                    position: Advertising Liaison
+                    telegram: samuel
+                    updated_at: '2022-11-13 18:35:46'
+                  summary: пользователя успешно получен
     delete:
       summary: Удаление сессии
       tags:
@@ -114,7 +201,7 @@ paths:
           description: сессия удалена
   "/api/user/users":
     get:
-      summary: Список пользователей
+      summary: Получить список пользователей
       tags:
       - Пользователь
       security:
@@ -135,7 +222,7 @@ paths:
       - name: sort_dir
         in: query
         required: false
-        default: 
+        default:
         example:
         - asc
         - desc
@@ -145,7 +232,7 @@ paths:
       - name: sort_col
         in: query
         required: false
-        default: 
+        default:
         example:
         - id
         description: Название поля для сортировки
@@ -161,7 +248,117 @@ paths:
         description: Кол-во элементов отображаемых на странице
       responses:
         '200':
-          description: список пользователей получен
+          description: Список пользователей получен
+          content:
+            application/json:
+              examples:
+                Список пользователей получен:
+                  value:
+                  - id: 261
+                    avatar:
+                    bio: Language designers want to design the perfect language. They
+                      want to be able to say, 'My language is perfect. It can do everything.'
+                      But it's just plain impossible to design a perfect language,
+                      because there are two ways to look at a language. One way is
+                      by looking at what can be done with that language. The other
+                      is by looking at how we feel using that language-how we feel
+                      while programming.
+                    birthday: 02.10.1991
+                    created_at: '2022-11-13 18:35:46'
+                    email: samira.nolan@hoeger-morar.com
+                    errors:
+                      full_messages: []
+                      messages: {}
+                    first_name: Михаил
+                    last_name: Маслов
+                    location: Австрия
+                    login: lola
+                    middle_name: Костина
+                    phone: "+76301225271"
+                    position: Direct Designer
+                    telegram: gwenda
+                    updated_at: '2022-11-13 18:35:46'
+                  summary: Список пользователей получен
+    post:
+      summary: Создать пользователя
+      tags:
+      - Пользователь
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '201':
+          description: Пользователь создан
+          content:
+            application/json:
+              examples:
+                Пользователь создан:
+                  value:
+                    id: 263
+                    avatar:
+                    bio:
+                    birthday:
+                    created_at: '2022-11-13 18:35:46'
+                    email:
+                    errors:
+                      full_messages: []
+                      messages: {}
+                    first_name:
+                    last_name:
+                    location:
+                    login: test
+                    middle_name:
+                    phone:
+                    position:
+                    telegram:
+                    updated_at: '2022-11-13 18:35:46'
+                  summary: Пользователь создан
+        '422':
+          description: Ошибка при создании пользователя
+          content:
+            application/json:
+              examples:
+                Ошибка при создании пользователя:
+                  value:
+                    id:
+                    avatar:
+                    bio:
+                    birthday:
+                    created_at:
+                    email:
+                    errors:
+                      full_messages:
+                      - Пароль не может быть пустым
+                      - Login не может быть пустым
+                      messages:
+                        password:
+                        - не может быть пустым
+                        login:
+                        - не может быть пустым
+                    first_name:
+                    last_name:
+                    location:
+                    login: ''
+                    middle_name:
+                    phone:
+                    position:
+                    telegram:
+                    updated_at:
+                  summary: Ошибка при создании пользователя
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              examples:
+                Не авторизован:
+                  value:
+                    error: Нет разрешения!
+                  summary: Не авторизован
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/user"
   "/api/user/users/{id}":
     parameters:
     - name: id
@@ -171,16 +368,58 @@ paths:
       schema:
         type: string
     get:
-      summary: Получение пользователя
+      summary: Получить пользователя
       tags:
       - Пользователь
       security:
       - Bearer: {}
       responses:
         '200':
-          description: пользователь получен
+          description: Пользователь получен
+          content:
+            application/json:
+              examples:
+                Пользователь получен:
+                  value:
+                    id: 265
+                    avatar:
+                    bio: Smart people underestimate the ordinarity of ordinary people.
+                    birthday: 11.05.1990
+                    created_at: '2022-11-13 18:35:46'
+                    email: lee_beier@strosin-witting.io
+                    errors:
+                      full_messages: []
+                      messages: {}
+                    first_name: Марина
+                    last_name: Соловьев
+                    location: Сейшельские острова
+                    login: nettie_crist
+                    middle_name: Молчанов
+                    phone: "+77106559237"
+                    position: Investor Government Designer
+                    telegram: lamonica.tromp
+                    updated_at: '2022-11-13 18:35:46'
+                  summary: Пользователь получен
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              examples:
+                Пользователь не найден:
+                  value:
+                    error: Пользователь не найден!
+                  summary: Пользователь не найден
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              examples:
+                Не авторизован:
+                  value:
+                    error: Нет разрешения!
+                  summary: Не авторизован
     put:
-      summary: Редактирование пользователя
+      summary: Отредактировать пользователя
       tags:
       - Пользователь
       security:
@@ -188,14 +427,124 @@ paths:
       parameters: []
       responses:
         '200':
-          description: пользователь отредактирован
+          description: Пользователь отредактирован
+          content:
+            application/json:
+              examples:
+                Пользователь отредактирован:
+                  value:
+                    id: 269
+                    avatar:
+                    bio: From the viewpoint of what you can do, therefore, languages
+                      do differ - but the differences are limited. For example, Python
+                      and Ruby provide almost the same power to the programmer.
+                    birthday: 22.05.1991
+                    created_at: '2022-11-13 18:35:46'
+                    email: new_email@yandex.ru
+                    errors:
+                      full_messages: []
+                      messages: {}
+                    first_name: Степан
+                    last_name: Фролова
+                    location: Мальта
+                    login: rosaura_mohr
+                    middle_name: Герасимов
+                    phone: "+79428241540"
+                    position: IT Architect
+                    telegram: rhoda
+                    updated_at: '2022-11-13 18:35:46'
+                  summary: Пользователь отредактирован
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              examples:
+                Пользователь не найден:
+                  value:
+                    error: Пользователь не найден!
+                  summary: Пользователь не найден
         '422':
-          description: ошибка при редактирование пользователя
+          description: Ошибка при редактирование пользователя
+          content:
+            application/json:
+              examples:
+                Ошибка при редактирование пользователя:
+                  value:
+                    id: 272
+                    avatar:
+                    bio: In our daily lives as programmers, we process text strings
+                      a lot. So I tried to work hard on text processing, namely the
+                      string class and regular expressions. Regular expressions are
+                      built into the language and are very tuned up for use.
+                    birthday: 25.12.1989
+                    created_at: '2022-11-13 18:35:47'
+                    email: albertha.wolf@veum.name
+                    errors:
+                      full_messages:
+                      - Login не может быть пустым
+                      messages:
+                        login:
+                        - не может быть пустым
+                    first_name: Аркадий
+                    last_name: Лихачева
+                    location: Доминика
+                    login: ''
+                    middle_name: Вишняков
+                    phone: "+79044820095"
+                    position: Accounting Officer
+                    telegram: kraig_barton
+                    updated_at: '2022-11-13 18:35:47'
+                  summary: Ошибка при редактирование пользователя
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              examples:
+                Не авторизован:
+                  value:
+                    error: Нет разрешения!
+                  summary: Не авторизован
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               "$ref": "#/components/schemas/user"
+    delete:
+      summary: Удалить пользователя
+      tags:
+      - Пользователь - Пользователи
+      security:
+      - Bearer: {}
+      responses:
+        '204':
+          description: Пользователь удален
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              examples:
+                Пользователь не найден:
+                  value:
+                    error: Пользователь не найден!
+                  summary: Пользователь не найден
+        '422':
+          description: Ошибка при удаление пользовалтеля
+          content:
+            application/json:
+              examples:
+                Ошибка при удаление пользовалтеля:
+                  value:
+                    error: Ошибка при удалении пользователя!
+                  summary: Ошибка при удаление пользовалтеля
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              examples:
+                Не авторизован:
+                  value:
+                    error: Нет разрешения!
+                  summary: Не авторизован
 schemes:
 - http
 - https
@@ -227,9 +576,11 @@ components:
           description: Почта
         login:
           type: string
+          required: true
           description: Логин
         password:
           type: string
+          required: true
           description: Пароль
         first_name:
           type: string
@@ -258,6 +609,9 @@ components:
         bio:
           type: string
           description: О себе
+        avatar:
+          type: file
+          description: Аватар
     reset_password_email:
       type: object
       properties:

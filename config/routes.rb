@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api, format: :json do
     namespace :user do
-      resources :users, only: %i[index show update]
+      resources :users
       resource :session, only: %i[show destroy]
     end
 

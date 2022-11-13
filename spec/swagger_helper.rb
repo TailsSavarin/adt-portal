@@ -13,7 +13,7 @@ RSpec.configure do |config|
 
   # Автоматически генерировать примеры ответов
   config.after type: :request do |example|
-    # for head: :no_content
+    # when head: :no_content
     next if response.body.blank?
 
     current_description = example.metadata[:response][:description]

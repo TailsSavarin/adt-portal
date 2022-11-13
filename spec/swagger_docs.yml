@@ -39,9 +39,11 @@ swagger.yaml:
             description: Почта
           login:
             type: string
+            required: true
             description: Логин
           password:
             type: string
+            required: true
             description: Пароль
           first_name:
             type: string
@@ -70,6 +72,9 @@ swagger.yaml:
           bio:
             type: string
             description: О себе
+          avatar:
+            type: file
+            description: Аватар
       # Создание письма для восстановления пароля
       reset_password_email:
         type: object

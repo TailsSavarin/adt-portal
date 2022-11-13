@@ -21,7 +21,8 @@ class UserForm < BaseForm
       :telegram,
       :birthday,
       :position,
-      :bio
+      :bio,
+      :avatar
     )
   end
 end

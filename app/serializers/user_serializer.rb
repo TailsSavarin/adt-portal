@@ -12,4 +12,8 @@ class UserSerializer < BaseSerializer
   field :first_name
   field :middle_name
   field :birthday, datetime_format: '%d.%m.%Y'
+
+  field :avatar do |obj|
+    FileSerializer.render_as_hash(obj.avatar, view: :url) if obj.avatar.attached?
+  end
 end

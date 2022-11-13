@@ -6,14 +6,14 @@ RSpec.describe Api::SessionsController, type: :request do
   let(:user) { create(:user) }
 
   path '/api/session' do
-    post 'Создание сессии' do
+    post 'Создать сессию' do
       tags 'Сессия'
       consumes 'application/json'
       produces 'application/json'
 
       parameter name: :auth, in: :body, schema: { '$ref': '#/components/schemas/auth' }
 
-      response '200', 'сессия успешно создана' do
+      response 200, 'Сессия создана' do
         let(:auth) do
           {
             login: user.login,
@@ -24,15 +24,13 @@ RSpec.describe Api::SessionsController, type: :request do
         run_test! do
           body = JSON.parse(response.body, symbolize_names: true)
 
-          expect(body).to have_key(:csrf)
-          expect(body).to have_key(:access)
-          expect(body).to have_key(:access_expires_at)
-          expect(body).to have_key(:refresh)
-          expect(body).to have_key(:refresh_expires_at)
+          %i[csrf access access_expires_at refresh refresh_expires_at].each do |k|
+            expect(body).to have_key(k)
+          end
         end
       end
 
-      response '422', 'неверный пароль' do
+      response 422, 'Неверный пароль' do
         let(:auth) do
           {
             login: user.login,
@@ -43,7 +41,7 @@ RSpec.describe Api::SessionsController, type: :request do
       end
     end
 
-    put 'Обновление токена' do
+    put 'Обновить токен' do
       tags 'Сессия'
       produces 'application/json'
       consumes 'application/json'
@@ -53,10 +51,10 @@ RSpec.describe Api::SessionsController, type: :request do
         type: :string,
         name: 'X-Refresh-Token',
         required: true,
-        description: 'Токен сброса'
+        description: 'Рефрешь токен'
       )
 
-      response 200, 'Access токен обновлен' do
+      response 200, 'Токен сессии обновлен' do
         let(:'X-Refresh-Token') { token_for(user)[:refresh] } # rubocop:disable RSpec/VariableName
 
         run_test! do
@@ -71,7 +69,7 @@ RSpec.describe Api::SessionsController, type: :request do
       response 403, 'Срок действия рефреш токена истек' do
         let!(:'X-Refresh-Token') { token_for(user)[:refresh] } # rubocop:disable RSpec/VariableName, RSpec/LetSetup
 
-        before { travel_to 2.month.after }
+        before { travel_to 2.months.after }
 
         after { travel_back } # rubocop:disable Rails/RedundantTravelBack
 

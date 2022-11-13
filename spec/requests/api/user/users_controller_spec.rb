@@ -6,7 +6,7 @@ RSpec.describe Api::User::UsersController, type: :request do
   let(:current_user) { create(:user) }
 
   path '/api/user/users' do
-    get 'Список пользователей' do
+    get 'Получить список пользователей' do
       tags 'Пользователь'
       produces 'application/json'
       security [Bearer: {}]
@@ -43,7 +43,7 @@ RSpec.describe Api::User::UsersController, type: :request do
         required: false,
         default: nil,
         type: :string,
-        example: %w[id],
+        example: %i[id],
         description: 'Название поля для сортировки'
       )
 
@@ -61,7 +61,7 @@ RSpec.describe Api::User::UsersController, type: :request do
         description: 'Кол-во элементов отображаемых на странице'
       )
 
-      response '200', 'список пользователей получен' do
+      response 200, 'Список пользователей получен' do
         let(:Authorization) { token_for(current_user)[:access] }
 
         run_test! do
@@ -70,11 +70,49 @@ RSpec.describe Api::User::UsersController, type: :request do
         end
       end
     end
+
+    post 'Создать пользователя' do
+      tags 'Пользователь'
+      consumes 'multipart/form-data'
+      produces 'application/json'
+      security [Bearer: {}]
+
+      parameter name: :user, in: :formData, schema: { '$ref': '#/components/schemas/user' }
+
+      response 201, 'Пользователь создан' do
+        let(:Authorization) { token_for(current_user)[:access] }
+        let(:user) do
+          {
+            login: 'test',
+            password: 'test'
+          }
+        end
+
+        run_test! do
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body[:login]).to eq(user[:login])
+        end
+      end
+
+      response 422, 'Ошибка при создании пользователя' do
+        let(:Authorization) { token_for(current_user)[:access] }
+        let(:user) { { login: nil } }
+
+        run_test! do
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body[:errors][:full_messages]).to be_present
+        end
+      end
+
+      include_examples 'Пользователь не авторизован' do
+        let(:user) { {} }
+      end
+    end
   end
 
   path '/api/user/users/{id}' do
     let(:another_user) { create(:user) }
-    let(:id) { current_user.id }
+    let(:id) { another_user.id }
 
     parameter name: :id,
               in: :path,
@@ -82,30 +120,42 @@ RSpec.describe Api::User::UsersController, type: :request do
               required: true,
               description: 'ID пользователя'
 
-    get 'Получение пользователя' do
+    get 'Получить пользователя' do
       tags 'Пользователь'
       produces 'application/json'
       security [Bearer: {}]
 
-      response '200', 'пользователь получен' do
+      response 200, 'Пользователь получен' do
         let(:Authorization) { token_for(current_user)[:access] }
 
         run_test! do
           body = JSON.parse(response.body, symbolize_names: true)
-          expect(body[:id]).to eq(current_user.id)
+          expect(body[:id]).to eq(another_user.id)
         end
       end
+
+      response 404, 'Пользователь не найден' do
+        let(:Authorization) { token_for(current_user)[:access] }
+        let(:id) { 0 }
+
+        run_test! do
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body[:error]).to eq(I18n.t('api.users.errors.not_found'))
+        end
+      end
+
+      include_examples 'Пользователь не авторизован'
     end
 
-    put 'Редактирование пользователя' do
+    put 'Отредактировать пользователя' do
       tags 'Пользователь'
-      consumes 'application/json'
+      consumes 'multipart/form-data'
       produces 'application/json'
       security [Bearer: {}]
 
-      parameter name: :user, in: :body, schema: { '$ref': '#/components/schemas/user' }
+      parameter name: :user, in: :formData, schema: { '$ref': '#/components/schemas/user' }
 
-      response '200', 'пользователь отредактирован' do
+      response 200, 'Пользователь отредактирован' do
         let(:Authorization) { token_for(current_user)[:access] }
         let(:user) do
           {
@@ -119,15 +169,67 @@ RSpec.describe Api::User::UsersController, type: :request do
         end
       end
 
-      response '422', 'ошибка при редактирование пользователя' do
+      response 404, 'Пользователь не найден' do
         let(:Authorization) { token_for(current_user)[:access] }
-        let(:user) { { password: nil } }
+        let(:user) { {} }
+        let(:id) { 0 }
+
+        run_test! do
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body[:error]).to eq(I18n.t('api.users.errors.not_found'))
+        end
+      end
+
+      response 422, 'Ошибка при редактирование пользователя' do
+        let(:Authorization) { token_for(current_user)[:access] }
+        let(:user) { { login: nil } }
 
         run_test! do
           body = JSON.parse(response.body, symbolize_names: true)
           expect(body[:errors][:full_messages]).to be_present
         end
       end
+
+      include_examples 'Пользователь не авторизован' do
+        let(:user) { {} }
+      end
+    end
+
+    delete 'Удалить пользователя' do
+      tags 'Пользователь - Пользователи'
+      produces 'application/json'
+      security [Bearer: {}]
+
+      response 204, 'Пользователь удален' do
+        let(:Authorization) { token_for(current_user)[:access] }
+
+        run_test! do
+          expect { another_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      response 404, 'Пользователь не найден' do
+        let(:Authorization) { token_for(current_user)[:access] }
+        let(:id) { 0 }
+
+        run_test! do
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body[:error]).to eq(I18n.t('api.users.errors.not_found'))
+        end
+      end
+
+      response 422, 'Ошибка при удаление пользовалтеля' do
+        let(:Authorization) { token_for(current_user)[:access] }
+
+        before { allow_any_instance_of(User).to receive(:destroy).and_return(false) }
+
+        run_test! do |response|
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body[:error]).to eq(I18n.t('api.users.errors.destroy'))
+        end
+      end
+
+      include_examples 'Пользователь не авторизован'
     end
   end
 end

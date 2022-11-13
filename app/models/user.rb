@@ -5,6 +5,10 @@ class User < ApplicationRecord
 
   RESET_PASSWORD_EXP_TIME = 15
 
+  has_one_attached :avatar
+
+  validates :login, uniqueness: true, presence: true
+
   def generate_password_reset_token!
     update(
       reset_password_token: SecureRandom.hex(10),
