@@ -55,17 +55,22 @@
         </form>
       </div>
       <div class="container_four">
-        <h2>Новый пароль</h2>
-        <div style="display:flex;">
-          <div style="margin-right:20px">
+        <div>
+            <h2>Новый пароль</h2>
+            
+        </div>
+        <div style="display:flex; ">
+          <div style="margin-right:10px; width: 45%;">
             <label class="label" for="password">Пароль</label>
-            <my-input v-model="password" class="input" type="password" name="password" id="password"/>
-          </div>
-          <div>
+            <my-input v-model="password" class="input" :type="showPassword ? 'text' : 'password'" name="password" id="password" @input="updateInputPasswordBtn" @click="updateInputPassword"/>
+            
+        </div>
+          <div style=" width: 45%;">
             <label class="label" for="passwordRepeat">Повторите пароль</label>
-            <my-input v-model="passwordRepeat" class="input" type="password" name="passwordRepeat" id="passwordRepeat"/>
-          </div>
-
+            <my-input v-model="passwordRepeat" :type="showPassword ? 'text' : 'password'" class="input" name="passwordRepeat" id="passwordRepeat"  @input="updateInputPasswordBtn" @click="updateInputPassword"/>
+           
+        </div>
+            <div class="passwordVis" @click="showPassword = !showPassword"></div>
         </div>
       </div>
     </div>
@@ -147,6 +152,7 @@ export default {
       position: null,
       bio: null,
       id: null,
+      showPassword:false
 
     }
   },
@@ -243,10 +249,20 @@ export default {
 
       }
     },
+    updateInputPassword() {
+        password.style.boxShadow = 'none'
+        passwordRepeat.style.boxShadow = 'none'
+        
+    },
+    updateInputPasswordBtn(event){
+        btn.classList.add('btn-blue')
+    },
+
 
     async saveСhange() {
-      if (this.password === this.passwordRepeat) {
+      if (this.password == this.passwordRepeat) {
         try {
+          
           const user = {
             first_name: this.first_name,
             middle_name: this.middle_name,
@@ -256,6 +272,7 @@ export default {
             telegram: this.telegram,
             birthday: this.birthday,
             position: this.position,
+            password: this.password,
             bio: this.bio
           }
           const test = await axios.put(`/api/user/users/${this.id}`, {user: {...user}}, {
@@ -385,6 +402,7 @@ h2 {
   border-radius: 20px;
   padding: 24px;
   margin-top: 20px;
+  position:relative 
 }
 
 .form {
@@ -458,6 +476,14 @@ h2 {
 
 .btn-blue {
   background: #4256F6;
+}
+.passwordVis{
+  background-image: url('../../../assets/img/eye.svg');
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 5px;
+  bottom: 39px;
 }
 
 </style>

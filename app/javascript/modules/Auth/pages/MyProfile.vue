@@ -91,9 +91,7 @@ export default{
 }
 </script>
 <style scoped>
-*{
 
-}
 
 .text_h2{
     font:700 16px/ 20px 'Montesart';

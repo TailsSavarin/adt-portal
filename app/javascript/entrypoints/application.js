@@ -1,4 +1,5 @@
 import router from '@/router';
+import { createPinia } from 'pinia'
 // import Vuex from 'vuex'
 // import store from '@/store';
 // import Vuelidate from 'validators';
@@ -9,6 +10,7 @@ const app = createApp(App);
 
 
 app.use(router)
+    .use(createPinia())
     // .use(Vuex)
     // .use(store)
     // .use(Vuelidate);

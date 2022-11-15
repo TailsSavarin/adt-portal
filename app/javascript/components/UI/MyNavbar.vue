@@ -10,6 +10,7 @@
               
               <div><p @click="$router.push('/')" style="cursor: pointer;" id="request">Заявки</p></div>
               <div><p @click="$router.push('/profile')" style="cursor: pointer;" id="myProfile">Мой профиль</p></div>
+              <div><p @click="$router.push('/users')" style="cursor: pointer;">Пользователи</p></div>
             </div>
 
         </div>
@@ -46,6 +47,7 @@
     width: 100%;
     height: 70px;
     background: #EEF1F6;
+    position: fixed;
 }
 .nav_list{
     display: flex;
@@ -53,7 +55,7 @@
     font:500 18px/ 30px 'Monserrat';
     color:#333333;
     text-align: center;
-    padding-top: 15px;
+
 
 }
 .p{

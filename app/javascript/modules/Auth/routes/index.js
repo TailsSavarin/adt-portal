@@ -21,6 +21,11 @@ export const auth = [
     path: '/editpage',
     name: 'EditPage',
     component: () => import('@/modules/Auth/pages/EditPage.vue')   
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: () => import('@/modules/Auth/pages/Users.vue')   
   }
 ]
 

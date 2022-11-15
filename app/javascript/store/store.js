@@ -1,36 +1,103 @@
-// import Vue from 'vue'
-// import Vuex from 'vuex'
-// import axios from 'axios'
-// Vue.use(Vuex)
-// export default new Vuex.Store({
-//   state: {
-//     status: '',
-//     token: localStorage.getItem('token') || '',
-//     user : {}
-//   },
-//   mutations: {
-//   },
-//   actions: {
-//     login({commit}, user){
-//       return new Promise((resolve, reject) => {
-//         commit('auth_request')
-//         axios({url: 'http://localhost:5100/login', data: user, method: 'POST' })
-//         .then(resp => {
-//           const token = resp.data.token
-//           const user = resp.data.user
-//           localStorage.setItem('token', token)
-//           axios.defaults.headers.common['Authorization'] = token
-//           commit('auth_success', token, user)
-//           resolve(resp)
-//         })
-//         .catch(err => {
-//           commit('auth_error')
-//           localStorage.removeItem('token')
-//           reject(err)
-//         })
-//       })
-//     }
-//   },
-//   getters : {
-//   }
-// })
+import { defineStore } from 'pinia'
+import axios from 'axios'
+
+export const useTodoStore = defineStore({
+  id: 'todo',
+  state: () => ({ 
+     
+    user:null,
+    users:[],
+    show:false,
+    token:localStorage.getItem('token'),
+
+    birthday:"",
+    position:"",
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    location: "",
+    telegram: "",
+    login:"",
+    password:"",
+    phone: "",
+    position: "",
+    email:"",
+    bio: "",
+    id: "",
+    avatar:"",
+    
+    }),
+    getters: {
+        async getUser(){
+            try {
+                const response = await axios.get('/api/user/session', {
+                  headers: {
+                    Authorization: localStorage.getItem('token')
+                  }
+                });
+                console.log(response)
+                return this.user = response.data
+                
+
+              } catch (e) {
+                console.error(e)
+              }
+
+          }
+          ,
+        
+        async getAllUsers(){
+          try {
+              const resp = await axios.get('/api/user/users', {
+                headers: {
+                  Authorization: localStorage.getItem('token')
+                }
+              });
+              console.log(resp)
+              return this.users = resp.data
+              
+              
+
+            } catch (e) {
+              console.error(e)
+            }
+
+        }
+        },
+    actions:{
+        async createUser(){
+            this.show = false
+            try{
+                const user = {
+                    first_name: this.first_name,
+                    middle_name: this.middle_name,
+                    last_name: this.last_name,
+                    location: this.location,
+                    phone: this.phone,
+                    telegram: this.telegram,
+                    birthday: this.birthday,
+                    position: this.position,
+                    password: this.password,
+                    bio: this.bio,
+                    login:this.login,
+                    password:this.password,
+                    avatar: this.avatar
+                    
+                  }
+                const test = await axios.post('/api/user/users',{user: {...user}}, {
+                    headers: {
+                      Authorization: localStorage.getItem('token')
+                    },
+                  });
+              
+              console.log(test)
+            }
+      
+            catch (e) {
+                console.error(e)
+              }
+        }
+    }
+
+    }
+)

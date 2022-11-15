@@ -108,6 +108,7 @@ import axios from 'axios'
 import MyNavbar from '@/components/UI/MyNavbar.vue'
 import MyInput from '@/components/UI/MyInput.vue'
 
+
 export default{
     components:{
         MyNavbar,
@@ -230,6 +231,11 @@ export default{
     }
 
 } 
+</script>
+<script setup>
+import {useTodoStore} from '@/store/store'
+
+const todoStore = useTodoStore()
 </script>
 
 <style scoped>
