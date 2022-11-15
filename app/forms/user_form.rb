@@ -22,7 +22,7 @@ class UserForm < BaseForm
       :birthday,
       :position,
       :bio,
-      avatar: {}
+      :avatar
     )
   end
 end

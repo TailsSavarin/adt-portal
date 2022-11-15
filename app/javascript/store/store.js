@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import {objectToFormData} from '../../../lib/formdata';
 import axios from 'axios'
 
 export const useTodoStore = defineStore({
@@ -9,10 +10,9 @@ export const useTodoStore = defineStore({
       users: [],
       show: false,
       token: localStorage.getItem('token'),
-      // page: 1 ,
-      // limit: 4,
-      // totalPages: 0, 
-
+      page: 1 ,
+      items: 4,
+      totalPages: 0,
       birthday: "",
       position: "",
       first_name: "",
@@ -55,14 +55,13 @@ export const useTodoStore = defineStore({
               Authorization: localStorage.getItem('token'),
 
             },
-            // params:{
-            //   _page: this.page,
-            //   _limit: this.limit,
-            //   }
+            params:{
+              page: this.page,
+              items: this.items,
+              }
           });
           console.log(resp)
-//           this.totalPages= Math.ceil(resp.headers['total-count'] /
-// this.limit) 
+          this.totalPages= Math.ceil(resp.headers['total-count'] / this.items)
           return this.users = resp.data
 
 
@@ -78,27 +77,26 @@ export const useTodoStore = defineStore({
 
 
         try {
-          const formData = new FormData()
-          formData.append('avatar', this.avatar)
-          formData.append('first_name', this.first_name)
-          formData.append('middle_name', this.middle_name)
-          formData.append('last_name', this.last_name)
-          formData.append('location', this.location)
-          formData.append('phone', this.phone)
-          formData.append('telegram', this.telegram)
-          formData.append('birthday', this.birthday)
-          formData.append('position', this.position)
-          formData.append('password', this.password)
-          formData.append('bio', this.bio)
-          formData.append('login', this.login)
-          
-    
-          console.log(formData)
-          const test = await axios.post('/api/user/users', formData, {
+          const data =
+            {
+              avatar: this.avatar,
+              first_name: this.first_name,
+              middle_name: this.middle_name,
+              last_name: this.last_name,
+              location: this.location,
+              phone: this.phone,
+              telegram: this.telegram,
+              birthday: this.birthday,
+              position: this.position,
+              password: this.password,
+              bio: this.bio,
+              login: this.login,
+            }
+
+          const request = objectToFormData({user: data})
+          const test = await axios.post('/api/user/users', request, {
             headers: {
-              'Content-Tipe': 'mulipart/form-data',
               'Authorization': localStorage.getItem('token'),
-              
             },
           });
 
@@ -107,18 +105,14 @@ export const useTodoStore = defineStore({
           console.error(e)
         }
       },
-      async deleteUser() {
+      async deleteUser(id) {
         try {
-          const del = await axios.delete(`/api/user/users/${this.id}`, {
+          const del = await axios.delete(`/api/user/users/${id}`, {
             headers: {
               Authorization: localStorage.getItem('token'),
-
             },
-
           });
           console.log(del)
-
-          
 
 
         } catch (e) {

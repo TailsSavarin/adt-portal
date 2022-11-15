@@ -64,7 +64,7 @@
               <div class="block">
                 <h4 style="margin:7px">Аватар</h4>
                 <my-input @change="onFileSelected" type="file" id="file" class="avatar-img" name="photo"
-                       />
+                />
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@
       <!-- <button class="btn">Список пользователей</button> -->
       <div class="all-user">
         <div v-for="user in todoStore.users" class="user-block">
-          <div class="user-section">{{ user.avatar }}</div>
+          <img class="user-section" :src="user.avatar?.url" alt="avatar"/>
           <div class="user-section">
             <p><h4>Имя:</h4>{{ user.first_name }}</p>
             <p><h4>Фамилия:</h4> {{ user.last_name }}</p>
@@ -86,21 +86,21 @@
             <p><h4>Телеграм:</h4>{{ user.telegram }}</p>
             <p><h4>Номер:</h4>{{ user.phone }}</p>
             <p><h4>Почта:</h4>{{ user.email }}</p>
-            
-            <button class="btn" @click="todoStore.deleteUser">Delete</button>
+
+            <button class="btn" @click.prevent="todoStore.deleteUser(user.id)">Удалить</button>
           </div>
-        
+
 
         </div>
       </div>
-        <!-- <div
-            v-for="pageNum in todoStore.totalPages"
-            :key="pageNum"
-            class="page"
-            
-            @click="changePage(pageNum)">
-            {{pageNum}}
-        </div> -->
+      <div
+          v-for="pageNum in todoStore.totalPages"
+          :key="pageNum"
+          class="page"
+
+          @click="changePage(pageNum)">
+        {{ pageNum }}
+      </div>
 
     </div>
 
@@ -116,19 +116,19 @@ import {onMounted} from 'vue';
 const todoStore = useTodoStore()
 const updateUser = onMounted(() => {
   todoStore.getAllUsers
-})   
+})
 
 const onFileSelected = (event) =>
     // console.log(event)
     todoStore.avatar = event.target.files[0]
-    // console.log(todoStore.avatar)
+// console.log(todoStore.avatar)
 // const users = todoStore.users
 
 
-// const changePage = (pageNum)=>{
-//     todoStore.page = pageNum
-//     todoStore.getAllUsers()
-// }
+const changePage = (pageNum)=>{
+    todoStore.page = pageNum
+    todoStore.getAllUsers()
+}
 
 const dialogVisiable = () => {
   todoStore.show = true
@@ -178,7 +178,7 @@ export default {
   background: white;
   border-radius: 12px;
   /* width: 650px; */
-    padding:40px;
+  padding: 40px;
   transition: all 0.8s ease;
 
 
@@ -223,7 +223,7 @@ export default {
   font: 700 16px / 30px 'Montserrat';
   padding: 10px;
   cursor: pointer;
-  margin:0 auto;
+  margin: 0 auto;
 
 }
 
@@ -279,11 +279,13 @@ label {
   padding: 20px 0;
 
 }
-p{
- padding: 10px 0;
+
+p {
+  padding: 10px 0;
 }
-h4{
-    display: inline;
-    padding-right: 10px;
+
+h4 {
+  display: inline;
+  padding-right: 10px;
 }
 </style>
