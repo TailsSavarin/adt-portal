@@ -5,7 +5,7 @@
       <button @click="dialogVisiable" class="btn">Создать пользователя</button>
       <!-- <div>{{todoStore.token}}</div> -->
       <div v-if="todoStore.show == true" class="dialog" @click="dialogUnvisiable">
-        <div @click.stop class="dialog-content">
+        <my-form @click.stop class="dialog-content">
           <div class="input-block">
             <div class="input-content">
               <div class="block">
@@ -62,35 +62,45 @@
                 <textarea v-model="todoStore.bio" class="textarea" cols="50" rows="10"></textarea>
               </div>
               <div class="block">
-                <h4 style="margin:0">Аватар</h4>
-                <input type="file" id="file" class="avatar-img" name="photo" multiple
-                       accept="image/*,image/jpeg">
+                <h4 style="margin:7px">Аватар</h4>
+                <my-input @change="onFileSelected" type="file" id="file" class="avatar-img" name="photo"
+                       />
               </div>
             </div>
           </div>
 
           <button class="btn" @click="todoStore.createUser">Создать</button>
-        </div>
+        </my-form>
 
       </div>
 
-      <button class="btn">Список пользователей</button>
+      <!-- <button class="btn">Список пользователей</button> -->
       <div class="all-user">
         <div v-for="user in todoStore.users" class="user-block">
-          <div class="user-section"></div>
+          <div class="user-section">{{ user.avatar }}</div>
           <div class="user-section">
-            <p>Имя: {{ user.first_name }}</p>
-            <p>Фамилия: {{ user.last_name }}</p>
-            <p>Отчество: {{ user.middle_name }}</p>
-            <p>Страна: {{ user.location }}</p>
-            <p>Телеграм:{{ user.telegram }}</p>
-            <p>Номер:{{ user.phone }}</p>
-            <p>Почта:{{ user.email }}</p>
+            <p><h4>Имя:</h4>{{ user.first_name }}</p>
+            <p><h4>Фамилия:</h4> {{ user.last_name }}</p>
+            <p><h4>Отчество: </h4>{{ user.middle_name }}</p>
+            <p><h4>Страна:</h4> {{ user.location }}</p>
+            <p><h4>Телеграм:</h4>{{ user.telegram }}</p>
+            <p><h4>Номер:</h4>{{ user.phone }}</p>
+            <p><h4>Почта:</h4>{{ user.email }}</p>
+            
+            <button class="btn" @click="todoStore.deleteUser">Delete</button>
           </div>
-
+        
 
         </div>
       </div>
+        <!-- <div
+            v-for="pageNum in todoStore.totalPages"
+            :key="pageNum"
+            class="page"
+            
+            @click="changePage(pageNum)">
+            {{pageNum}}
+        </div> -->
 
     </div>
 
@@ -106,24 +116,19 @@ import {onMounted} from 'vue';
 const todoStore = useTodoStore()
 const updateUser = onMounted(() => {
   todoStore.getAllUsers
-})
+})   
 
+const onFileSelected = (event) =>
+    // console.log(event)
+    todoStore.avatar = event.target.files[0]
+    // console.log(todoStore.avatar)
 // const users = todoStore.users
 
-// const users = todoStore.user
 
-// const newUser = reactive({
-//     first_name: todoStore.first_name,
-//     middle_name: todoStore.middle_name,
-//     last_name: todoStore.last_name,
-//     location: todoStore.location,
-//     phone: todoStore.phone,
-//     telegram: todoStore.telegram,
-//     birthday: todoStore.birthday,
-//     position: todoStore.position,
-//     password: todoStore.password,
-//     bio: todoStore.bio,
-// })
+// const changePage = (pageNum)=>{
+//     todoStore.page = pageNum
+//     todoStore.getAllUsers()
+// }
 
 const dialogVisiable = () => {
   todoStore.show = true
@@ -138,11 +143,13 @@ const dialogUnvisiable = () => {
 <script>
 import MyNavbar from '@/components/UI/MyNavbar.vue'
 import MyInput from '@/components/UI/MyInput.vue'
+import MyForm from '@/components/UI/MyForm.vue'
 
 export default {
   components: {
     MyNavbar,
-    MyInput
+    MyInput,
+    MyForm
   }
 }
 </script>
@@ -170,8 +177,8 @@ export default {
 .dialog-content {
   background: white;
   border-radius: 12px;
-  width: 650px;
-  padding: 50px 0 50px 50px;
+  /* width: 650px; */
+    padding:40px;
   transition: all 0.8s ease;
 
 
@@ -198,6 +205,7 @@ export default {
   flex-direction: column;
   margin: 0;
   width: 50%;
+  margin: 0 50px 0 0;
 }
 
 .input {
@@ -215,6 +223,7 @@ export default {
   font: 700 16px / 30px 'Montserrat';
   padding: 10px;
   cursor: pointer;
+  margin:0 auto;
 
 }
 
@@ -255,16 +264,26 @@ label {
 }
 
 .user-block {
-  margin: 20px 0;
+  margin: 10px 0px;
   width: 50%;
   height: 400px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   border: 1px solid black;
+  border-radius: 15px;
 }
 
 .user-section {
   width: 45%;
+  padding: 20px 0;
+
+}
+p{
+ padding: 10px 0;
+}
+h4{
+    display: inline;
+    padding-right: 10px;
 }
 </style>
