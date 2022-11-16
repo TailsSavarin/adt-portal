@@ -5,7 +5,7 @@
       <button @click="dialogVisiable" class="btn">Создать пользователя</button>
       <!-- <div>{{todoStore.token}}</div> -->
       <div v-if="todoStore.show == true" class="dialog" @click="dialogUnvisiable">
-        <my-form @click.stop class="dialog-content">
+        <my-form @click.stop class="dialog-content" type="submit">
           <div class="input-block">
             <div class="input-content">
               <div class="block">
@@ -76,28 +76,79 @@
 
       <!-- <button class="btn">Список пользователей</button> -->
       <div class="all-user">
-        <div v-for="user in todoStore.users" class="user-block">
-          <img class="user-section" :src="user.avatar?.url" alt="avatar"/>
-          <div class="user-section">
+
+        <div v-for="user in todoStore.users"  class="user-block">
+          <img class="user-section img" :src="user.avatar?.url" alt="avatar"/>
+          <div class="user-section inf" style="width:40%" >
             <p><h4>Имя:</h4>{{ user.first_name }}</p>
             <p><h4>Фамилия:</h4> {{ user.last_name }}</p>
             <p><h4>Отчество: </h4>{{ user.middle_name }}</p>
+            <p><h4>День рождения:</h4>{{ user.birthday }}</p>
+            <p><h4>Должность:</h4>{{ user.position }}</p>
             <p><h4>Страна:</h4> {{ user.location }}</p>
             <p><h4>Телеграм:</h4>{{ user.telegram }}</p>
             <p><h4>Номер:</h4>{{ user.phone }}</p>
             <p><h4>Почта:</h4>{{ user.email }}</p>
-
-            <button class="btn" @click.prevent="todoStore.deleteUser(user.id)">Удалить</button>
+            <div>
+              <button class="btn" @click="todoStore.deleteUser(user.id)">Удалить</button>
+            <button class="btn" @click="edit">Редактировать</button>
+            </div>
+            
           </div>
-
-
         </div>
+
+        <!-- <div v-for="oneUser in todoStore.users" v-if="userCardEdit" class="user-block">
+          <div class="user-section block" style="width:50%">
+                <div>
+                  <h4 style="margin:7px; display:inline;">Аватар</h4>
+                <my-input @change="onFileSelected" type="file" id="file" class="avatar-img" name="photo"
+                />
+                </div>
+                <img class="img-edit" :src="oneUser.avatar?.url" alt="avatar"/>
+              </div>
+          
+          <div class="user-section inf" style="width:40%" >
+            <div style="margin:0">
+              <h4>Имя:</h4>
+              <my-input v-model="oneUser.first_name " class="inputEdit"/></div>
+            <div style="margin:0">
+              <h4>Фамилия:</h4> 
+              <my-input v-model="oneUser.last_name " class="inputEdit" /></div>
+            <div style="margin:0">
+              <h4>Отчество: </h4>
+              <my-input v-model="oneUser.middle_name " class="inputEdit" /></div>
+            <div style="margin:0">
+              <h4>День рождения:</h4>
+              <my-input v-model="oneUser.birthday " class="inputEdit" /></div>
+            <div style="margin:0">
+              <h4>Должность:</h4>
+              <my-input v-model="oneUser.position " class="inputEdit"/></div>
+            <div style="margin:0">
+              <h4>Страна:</h4> 
+              <my-input v-model="oneUser.location " class="inputEdit"/></div>
+            <div style="margin:0">
+              <h4>Телеграм:</h4>
+              <my-input v-model="oneUser.telegram " class="inputEdit"/></div>
+            <div style="margin:0">
+              <h4>Номер:</h4>
+              <my-input v-model="oneUser.phone " class="inputEdit"/></div>
+            <div style="margin:0">
+              <h4>Почта:</h4>
+              <my-input v-model="oneUser.email " class="inputEdit"/></div>
+              <br>
+            <div>
+              <button class="btn" @click.prevent="todoStore.deleteUser(oneUser.id)">Удалить</button>
+            <button class="btn" @click.prevent="todoStore.editUser(oneUser.id)">Сохранить</button>
+            <button class="btn" @click.prevent="backUser(oneUser.id)">Назад</button>
+            </div>
+          </div> -->
+        <!-- </div> -->
       </div>
       <div
           v-for="pageNum in todoStore.totalPages"
           :key="pageNum"
           class="page"
-
+          :class="{'current-page': todoStore.page === pageNum}"
           @click="changePage(pageNum)">
         {{ pageNum }}
       </div>
@@ -111,7 +162,7 @@
 <script setup>
 
 import {useTodoStore} from '@/store/store'
-import {onMounted} from 'vue';
+import { onMounted} from 'vue';
 
 const todoStore = useTodoStore()
 const updateUser = onMounted(() => {
@@ -119,15 +170,12 @@ const updateUser = onMounted(() => {
 })
 
 const onFileSelected = (event) =>
-    // console.log(event)
     todoStore.avatar = event.target.files[0]
-// console.log(todoStore.avatar)
-// const users = todoStore.users
 
 
 const changePage = (pageNum)=>{
     todoStore.page = pageNum
-    todoStore.getAllUsers()
+    todoStore.getAllUsers
 }
 
 const dialogVisiable = () => {
@@ -138,6 +186,17 @@ const dialogUnvisiable = () => {
   todoStore.show = false
 }
 
+// const userCard = ref(true)
+// const userCardEdit = ref(false)
+
+// const edit = () => {
+//   userCard.value = false;
+//   userCardEdit.value = true
+// }
+// const backUser = () => {
+//   userCard.value = true;
+//   userCardEdit.value = false
+// }
 
 </script>
 <script>
@@ -216,14 +275,14 @@ export default {
 .btn {
   min-width: 98px;
   min-height: 44px;
-  background: #2376b6;;
+  background: #2376b6;
   border: none;
   border-radius: 10px;
   color: white;
   font: 700 16px / 30px 'Montserrat';
   padding: 10px;
   cursor: pointer;
-  margin: 0 auto;
+  margin: 10px;
 
 }
 
@@ -256,36 +315,80 @@ label {
 }
 
 .all-user {
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  margin:0;
 
 }
 
 .user-block {
-  margin: 10px 0px;
-  width: 50%;
-  height: 400px;
+  margin: 10px 10px;
+  width: 48%;
+  height: 500px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  border: 1px solid black;
+  border: 1px solid #2376b667;
   border-radius: 15px;
-}
+  transition: all 0.8s ease;
 
+}
+.user-block:hover{
+  border: 1px solid #005c96dc;
+  background-color: rgba(184, 227, 255, 0.226);
+  transition: all 0.8s ease;
+
+}
 .user-section {
-  width: 45%;
+
   padding: 20px 0;
 
 }
 
 p {
   padding: 10px 0;
+  margin: 0;
 }
 
 h4 {
   display: inline;
   padding-right: 10px;
+}
+.page{
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 15px;
+}
+.current-page{
+  background-color: #2376b6;
+  color:aliceblue
+}
+.img{
+  max-width: 400px;
+  height: 500px;
+  padding: 10px;
+  border-radius: 20px;
+  /* width: 55%; */
+}
+.inf{
+  display: flex;
+  flex-direction: column;
+  vertical-align: left;
+
+}
+.inputEdit{
+  max-width: 150px;
+  margin:0 0 5px 0;
+}
+.img-edit{
+  max-width: 400px;
+  /* height: 500px; */
+  padding: 10px;
+  border-radius: 20px;
+  width: 80%;
 }
 </style>

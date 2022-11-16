@@ -10,7 +10,8 @@
               
               <div><p @click="$router.push('/')" style="cursor: pointer;" id="request">Заявки</p></div>
               <div><p @click="$router.push('/profile')" style="cursor: pointer;" id="myProfile">Мой профиль</p></div>
-              <div><p @click="$router.push('/users')" style="cursor: pointer;">Пользователи</p></div>
+              <div><p @click="$router.push('/users')" style="cursor: pointer;" id="users">Пользователи</p></div>
+              <div><p @click="$router.push('/usersPagination')" style="cursor: pointer;" id="usersPagination">Пользователи**</p></div>
             </div>
 
         </div>
@@ -34,6 +35,14 @@
       if(currentUrl == '/'){
         request.style.borderBottom= '3px solid #033A92'
       }
+      if(currentUrl == '/users'){
+        users.style.borderBottom= '3px solid #033A92'
+      }
+
+      if(currentUrl == '/usersPagination'){
+        usersPagination.style.borderBottom= '3px solid #033A92'
+      }
+
       
       })()
 

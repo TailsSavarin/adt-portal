@@ -11,7 +11,7 @@ export const auth = [
     path: '/',
     name: 'Main',
     component: () => import('@/modules/Auth/pages/Main.vue'),
-    meta: { requiresAuth: true }   
+       
   },
   {
     path: '/profile',
@@ -27,6 +27,12 @@ export const auth = [
     path: '/users',
     name: 'Users',
     component: () => import('@/modules/Auth/pages/Users.vue')   
-  }
+  },
+  {
+    path: '/usersPagination',
+    name: 'UsersPagination',
+    component: () => import('@/modules/Auth/pages/UsersPagination.vue')   
+  },
+  
 ]
 

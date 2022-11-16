@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {objectToFormData} from '../../../lib/formdata';
 import axios from 'axios'
+import {useRoute, useRouter} from 'vue-router';
 
 export const useTodoStore = defineStore({
     id: 'todo',
@@ -69,6 +70,30 @@ export const useTodoStore = defineStore({
           console.error(e)
         }
 
+      },
+      async loadMoreUsers() {
+        try {
+          this.page +=1;
+          const resp = await axios.get('/api/user/users', {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+
+            },
+            params:{
+              page: this.page,
+              items: this.items,
+              }
+          });
+          console.log(resp)
+          this.totalPages= Math.ceil(resp.headers['total-count'] / this.items)
+          return this.users = [...this.users,...resp.data]
+
+
+
+        } catch (e) {
+          console.error(e)
+        }
+
       }
     },
     actions: {
@@ -99,7 +124,19 @@ export const useTodoStore = defineStore({
               'Authorization': localStorage.getItem('token'),
             },
           });
-
+          this.first_name = '',
+          this.password = '',
+          this.avatar= '',
+          this.middle_name= '',
+          this.last_name= '',
+          this.location= '',
+          this.phone= '',
+          this.telegram= '',
+          this.birthday= '',
+          this.position= '',
+          this.bio= '',
+          this.login= '',
+          this.email= '',
           console.log(test)
         } catch (e) {
           console.error(e)
@@ -113,13 +150,103 @@ export const useTodoStore = defineStore({
             },
           });
           console.log(del)
-
+          
+          window.location.reload()
 
         } catch (e) {
           console.error(e)
         }
 
-      }
-    }
-  }
+      },
+      // async editUser(id) {
+      //     try {
+      //       const useredit = {
+      //         avatar: this.avatar,
+      //         first_name: this.first_name,
+      //         middle_name: this.middle_name,
+      //         last_name: this.last_name,
+      //         location: this.location,
+      //         phone: this.phone,
+      //         telegram: this.telegram,
+      //         birthday: this.birthday,
+      //         position: this.position,
+      //         bio: this.bio,
+
+      //       }
+      //       const edit = await axios.put(`/api/user/users/${id}`, {user: {...useredit}}, {
+      //         headers: {
+      //           Authorization: localStorage.getItem('token')
+      //         },
+      //       });
+      //     } catch (e) {
+      //       console.error(e)
+      //     }
+      //   }
+      }}
+  
 )
+
+export const useAuthUser = defineStore({
+  id: 'auth',
+  state: () => ({
+    login:'',
+    password:'',
+    email:'',
+    formShow:true,
+    passwordRecovery:false,
+    error: '',
+    showPassword: false,
+    isAuthenticated:false,
+    router: useRouter(),
+    route: useRoute(),
+  }),
+  actions:{
+      async handleSubmit(){
+        try{
+          const response = await axios.post('/api/session',{
+          login: this.login,
+          password:this.password
+        });
+        console.log(response)
+        localStorage.setItem('token', response.data.access)
+        if (localStorage.getItem('token')){
+          this.isAuthenticated = true
+          this.router.push('/')
+        }
+
+        // this.isAuthenticated = localStorage.getItem('token')
+        // this.router.beforeEach((to, from, next) => {
+        //   if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+        // else next('/')
+        // })    
+      }
+
+        catch({response}){
+
+          this.error = response.data.error
+        }
+      },
+      async getPassword(){
+        try{
+          const resp = await axios.post('/api/passwords',{
+            email: this.email
+          })
+          console.log(resp)
+        }
+        catch(e){
+          console.error(e)
+        }
+
+      },
+  },
+  // getters:{
+  //   async test () {
+
+  //       this.router.beforeEach((to, from, next) => {
+  //         if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+  //       else next('/')
+  //       })    
+
+  //   }
+  // }
+})

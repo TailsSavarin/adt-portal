@@ -1,51 +1,55 @@
 <template>
   <div class="wrapper" @mousemove="playParallax">
     <moving-icons/>
-    <my-form @submit.prevent v-if="authUser.formShow">
+    <my-form @submit.prevent v-if="formShow">
       <div class="logo"></div>
 
       <div style="margin:0">
         <label for="login" class="label">Логин</label>
-        <my-input v-model="authUser.login" type="text" name="login" class="input" @input="inputUpdate"/>
+        <my-input v-model="login" type="text" name="login" class="input" @input="inputUpdate"/>
 
         <div class="blockPassword">
           <label for="password" class="label">Пароль</label>
-          <my-input v-model="authUser.password" :type="authUser.showPassword ? 'text' : 'password'" name="password" class="input" id="password" />
-          <div class="passwordVis" @click="authUser.showPassword = !authUser.showPassword"></div>
+          <my-input v-model="password" :type="showPassword ? 'text' : 'password'" name="password" class="input" id="password" />
+          <div class="passwordVis" @click="showPassword = !showPassword"></div>
         </div>
 
 
-        <p class="wrong" v-if="authUser.error">{{authUser.error}}</p>
+        <p class="wrong" v-if="error">{{error}}</p>
         <p class="text" @click="forgotPassword" style="cursor: pointer;">Забыли пароль?</p>
 
       </div>
-     <my-button @click="authUser.handleSubmit" id="btn">Войти</my-button>
+     <my-button @click="handleSubmit" id="btn">Войти</my-button>
 
 
     </my-form>
-    <my-form v-if="authUser.passwordRecovery" style="min-height:370px">
+    <my-form v-if="passwordRecovery" style="min-height:370px">
       <div>
         <div class="logo"></div>
 
-        <div class="toBack" @click="authUser.passwordRecovery = false; authUser.formShow = true; authUser.login= null;authUser.password=null">
+        <div class="toBack" @click="this.passwordRecovery = false; this.formShow = true; this.login= null;this.password=null">
                     <div class="arrow">назад</div>
         </div>
         <label for="email" class="label">Ваша рабочая почта</label>
-        <my-input v-model="authUser.email" type="text" name="email" class="input" @input="inputUpdate"/>
-        <my-button @click="authUser.getPassword" id="btn">Запросить</my-button>
+        <my-input v-model="email" type="text" name="email" class="input" @input="inputUpdate"/>
+        <my-button @click="getPassword" id="btn">Запросить</my-button>
      </div>
     </my-form>
   </div>
 </template>
 
 <script>
+import {useRoute, useRouter} from 'vue-router';
 
+
+import axios from 'axios'
 import MyButton from '@/components/UI/MyButton.vue'
 import MyInput from '@/components/UI/MyInput.vue'
 import MyForm from '@/components/UI/MyForm.vue'
 import MovingIcons from '@/components/UI/MovingIcons.vue'
 
-
+const router = useRouter();
+const route = useRoute();
 
 export default {
   components:{
@@ -54,27 +58,23 @@ export default {
     MyInput,
     MyForm
   },
-}
-</script>
-<script setup>
-import {useRoute, useRouter} from 'vue-router';
-import axios from 'axios'
-import {useAuthUser} from '@/store/store'
-import {computed} from 'vue';
 
-const authUser = useAuthUser()
-const router = useRouter();
-const route = useRoute();
-
-const test = computed(()=>{
-  if (authUser.isAuthenticated)
-    return authUser.test
-})
-
-const playParallax = (e) => {
-      let imagePlx = document.getElementsByName("img");
-      let x = e.clientX / window.innerWidth;
-      let y = e.clientY / window.innerHeight;
+  data(){
+    return{
+      login:'',
+      password:'',
+      email:'',
+      formShow:true,
+      passwordRecovery:false,
+      error: null,
+      showPassword: false
+    }
+  },
+  methods: {
+    playParallax(e) {
+      const imagePlx = document.getElementsByName("img");
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
       for (let i = 0; i < imagePlx.length; i++) {
         if (i % 2) {
           imagePlx[i].style.transform = 'translate(-' + x * 50 + 'px, -' + y * 50 + 'px)';
@@ -82,17 +82,49 @@ const playParallax = (e) => {
           imagePlx[i].style.transform = 'translate(+' + x * 50 + 'px, +' + y * 50 + 'px)';
         }
       }
-}
-const forgotPassword = () => {
-  authUser.formShow = false;
-  authUser.passwordRecovery = true;
-}
-const inputUpdate = (event) => {
+
+    },
+    forgotPassword(){
+      this.formShow = false;
+      this.passwordRecovery = true;
+    },
+      async handleSubmit(){
+        try{
+          const response = await axios.post('/api/session',{
+          login: this.login,
+          password:this.password
+        });
+        console.log(response)
+        localStorage.setItem('token', response.data.access)
+
+        if (localStorage.getItem('token')){
+          this.$router.push('/');
+        }
+      }
+
+        catch({response}){
+
+          this.error = response.data.error
+        }
+      },
+      async getPassword(){
+        try{
+          const response = await axios.post('/api/passwords',{
+            email: this.email
+          })
+          console.log(response)
+        }
+        catch(e){
+          console.error(e)
+        }
+
+      },
+      inputUpdate(event){
         var len = event.target.value
 
         if (len.length > 0 ){
 
-           if ( authUser.password || authUser.login || authUser.email){
+           if ( this.password || this.login || this.email){
             btn.classList.add('btn-blue')
 
           }
@@ -102,6 +134,13 @@ const inputUpdate = (event) => {
         else{
             btn.classList.remove('btn-blue')
           }
+
+
+        },
+
+
+
+      },
 
 
 }
