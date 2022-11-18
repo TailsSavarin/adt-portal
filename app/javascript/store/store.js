@@ -3,6 +3,8 @@ import {objectToFormData} from '../../../lib/formdata';
 import axios from 'axios'
 import {useRoute, useRouter} from 'vue-router';
 
+
+
 export const useTodoStore = defineStore({
     id: 'todo',
     state: () => ({
@@ -12,7 +14,7 @@ export const useTodoStore = defineStore({
       show: false,
       token: localStorage.getItem('token'),
       page: 1 ,
-      items: 4,
+      items: 2,
       totalPages: 0,
       birthday: "",
       position: "",
@@ -47,8 +49,9 @@ export const useTodoStore = defineStore({
         }
 
       }
-      ,
-
+      
+    },
+    actions: {
       async getAllUsers() {
         try {
           const resp = await axios.get('/api/user/users', {
@@ -63,7 +66,7 @@ export const useTodoStore = defineStore({
           });
           console.log(resp)
           this.totalPages= Math.ceil(resp.headers['total-count'] / this.items)
-          return this.users = resp.data
+          return this.users = resp.data 
 
 
         } catch (e) {
@@ -85,8 +88,7 @@ export const useTodoStore = defineStore({
               }
           });
           console.log(resp)
-          this.totalPages= Math.ceil(resp.headers['total-count'] / this.items)
-          return this.users = [...this.users,...resp.data]
+          this.users = [...this.users,...resp.data]
 
 
 
@@ -94,9 +96,7 @@ export const useTodoStore = defineStore({
           console.error(e)
         }
 
-      }
-    },
-    actions: {
+      },
       async createUser() {
         this.show = false
 
@@ -151,37 +151,13 @@ export const useTodoStore = defineStore({
           });
           console.log(del)
           
-          window.location.reload()
+          // window.location.reload()
 
         } catch (e) {
           console.error(e)
         }
 
       },
-      // async editUser(id) {
-      //     try {
-      //       const useredit = {
-      //         avatar: this.avatar,
-      //         first_name: this.first_name,
-      //         middle_name: this.middle_name,
-      //         last_name: this.last_name,
-      //         location: this.location,
-      //         phone: this.phone,
-      //         telegram: this.telegram,
-      //         birthday: this.birthday,
-      //         position: this.position,
-      //         bio: this.bio,
-
-      //       }
-      //       const edit = await axios.put(`/api/user/users/${id}`, {user: {...useredit}}, {
-      //         headers: {
-      //           Authorization: localStorage.getItem('token')
-      //         },
-      //       });
-      //     } catch (e) {
-      //       console.error(e)
-      //     }
-      //   }
       }}
   
 )
@@ -197,28 +173,29 @@ export const useAuthUser = defineStore({
     error: '',
     showPassword: false,
     isAuthenticated:false,
-    router: useRouter(),
-    route: useRoute(),
+    // router: useRouter(),
+    // route: useRoute(),
   }),
   actions:{
       async handleSubmit(){
         try{
+
           const response = await axios.post('/api/session',{
           login: this.login,
           password:this.password
         });
         console.log(response)
-        localStorage.setItem('token', response.data.access)
+        localStorage.setItem('token',response.data.access )
         if (localStorage.getItem('token')){
           this.isAuthenticated = true
-          this.router.push('/')
-        }
 
-        // this.isAuthenticated = localStorage.getItem('token')
-        // this.router.beforeEach((to, from, next) => {
-        //   if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
-        // else next('/')
-        // })    
+          
+         return true
+        }
+        
+          // localStorage.setItem('token',response.data.access )
+          // this.isAuthenticated = true
+          // return true        
       }
 
         catch({response}){
@@ -239,14 +216,5 @@ export const useAuthUser = defineStore({
 
       },
   },
-  // getters:{
-  //   async test () {
 
-  //       this.router.beforeEach((to, from, next) => {
-  //         if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
-  //       else next('/')
-  //       })    
-
-  //   }
-  // }
 })

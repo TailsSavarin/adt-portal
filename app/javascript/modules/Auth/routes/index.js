@@ -33,6 +33,10 @@ export const auth = [
     name: 'UsersPagination',
     component: () => import('@/modules/Auth/pages/UsersPagination.vue')   
   },
-  
+  { 
+    path: '/:pathMatch(.*)*', 
+    name: '404', 
+    component: () => import('@/modules/Auth/pages/NotFound.vue') , 
+  },
 ]
 

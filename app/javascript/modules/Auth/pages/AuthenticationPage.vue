@@ -19,7 +19,7 @@
         <p class="text" @click="forgotPassword" style="cursor: pointer;">Забыли пароль?</p>
 
       </div>
-     <my-button @click="authUser.handleSubmit" id="btn">Войти</my-button>
+     <my-button @click="submitResult" id="btn">Войти</my-button>
 
 
     </my-form>
@@ -59,17 +59,21 @@ export default {
 <script setup>
 import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios'
-import {useAuthUser} from '@/store/store'
-import {computed} from 'vue';
+import {useAuthUser} from '@/store/store';
+import {computed} from 'vue'
 
 const authUser = useAuthUser()
 const router = useRouter();
 const route = useRoute();
 
-const test = computed(()=>{
-  if (authUser.isAuthenticated)
-    return authUser.test
-})
+
+
+const submitResult = () => {
+  if (authUser.handleSubmit()){
+    router.push('/') 
+  }
+}
+
 
 const playParallax = (e) => {
       let imagePlx = document.getElementsByName("img");

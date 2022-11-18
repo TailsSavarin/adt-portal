@@ -2,7 +2,7 @@
     <div>
       <div class="nav">
         <div class="nav_list" >
-            <span class="logo" @click="$router.push('/login')"></span>
+            <span class="logo" ></span>
             <div class="p">
               <div class="hide">Космические исследования
                   <span class="sticker">Soon</span>
@@ -79,7 +79,7 @@
     height: 61px;
     z-index: 10;
     margin: 0 0 0 150px;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .hide{
   color: #ABABAB;

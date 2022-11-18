@@ -92,7 +92,6 @@
               
               <div>
                 <button class="btn" @click="todoStore.deleteUser(user.id)">Удалить</button>
-              <button class="btn" @click="edit">Редактировать</button>
               </div>
               
             </div>
@@ -100,7 +99,6 @@
 
         </div>
         <div class="observer" @mouseover="loadUsers"></div>
-  
       </div>
   
   
@@ -112,19 +110,20 @@
   import {useTodoStore} from '@/store/store'
  
 
-  import { onMounted, computed, ref} from 'vue';   
+  import { onMounted, ref} from 'vue';   
   
   const todoStore = useTodoStore()
 
 
   const userVis = ref(true)
   const updateUser = onMounted(() => {
-    todoStore.getAllUsers
+    todoStore.getAllUsers()
   })
   
-  const loadUsers = computed(() => {
-    todoStore.loadMoreUsers
-  })
+  const loadUsers = () => {
+    todoStore.loadMoreUsers()
+  }
+
   const onFileSelected = (event) =>
       todoStore.avatar = event.target.files[0]
   
@@ -266,7 +265,7 @@
   .user-block {
     margin: 10px 10px;
     width: 48%;
-    height: 500px;
+    /* height: 500px; */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

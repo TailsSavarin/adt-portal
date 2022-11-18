@@ -49,7 +49,7 @@
                     <div class = "editPage"></div>
                 </div>
                 <div class ="blockButton">
-                    <button class="btn text_h2" @click="$router.push('/login')" style="cursor: pointer;"> Выйти</button>
+                    <button class="btn text_h2" @click="toExit" style="cursor: pointer;"> Выйти</button>
                     <div class = "exit"></div>
                 </div>
             </div>       
@@ -68,6 +68,25 @@ export default{
     data(){
         return{
             user: null
+        }
+    },
+    methods:{
+         toExit(){
+            try{
+                const response =  axios.delete('/api/user/session',{
+                  headers:{
+                      Authorization: localStorage.getItem('token')
+                  }
+                });
+                localStorage.removeItem('token')
+                window.location.reload()
+
+            }
+            
+            catch(e){
+            console.error(e)
+            }
+        
         }
     },
     mounted(){
@@ -158,7 +177,7 @@ export default{
 }
 .container_one{
     width: 419px;
-    height: 584px;
+    height: 580px;
     margin: 0 auto;
     background: #F5F6F7;
     border-radius: 20px;

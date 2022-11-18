@@ -135,15 +135,7 @@ export default{
         }
     },
     methods:{
-        async created(){
-            const response = await axios.get('/api/user/session', {
-                headers:{
-                    Authorization: 'Bearer' + localStorage.getItem('token')
-                }
-                            
 
-            })
-        },
         createEvent(){
             this.show = true
             this.toBack = true
@@ -209,10 +201,6 @@ export default{
 
     },
     mounted(){
-        (() => {
-            if(localStorage.getItem('token'))
-                console.log(localStorage)
-        })(),
         (async()=>{
             try{
                 const response = await axios.get('/api/user/session',{

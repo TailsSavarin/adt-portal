@@ -91,67 +91,35 @@
             <p><h4>Почта:</h4>{{ user.email }}</p>
             <div>
               <button class="btn" @click="todoStore.deleteUser(user.id)">Удалить</button>
-            <button class="btn" @click="edit">Редактировать</button>
+            
             </div>
             
           </div>
+        </div>  
+      </div>
+      <div class="page-block">
+        <div class="change-page" >
+          <div @click="changePage(todoStore.page - 1)" class="page" v-if="todoStore.page >1">Назад</div>
+          <div class="page" @click="changePage(1)" v-if="todoStore.page >2">{{1}}</div>
+          <div class="page" v-if="todoStore.page >2">...</div>
+          <div class="page" @click="changePage(todoStore.page - 1)" v-if="todoStore.page >1" >{{todoStore.page - 1}}</div>
+          <div class="page" :class="{'current-page': todoStore.page}">{{todoStore.page}}</div>
+          <div class="page" @click="changePage(todoStore.page + 1)" v-if="todoStore.page < todoStore.totalPages">{{todoStore.page + 1}}</div>
+          <div class="page" v-if="todoStore.page < todoStore.totalPages - 1">...</div>
+          <div class="page" @click="changePage(todoStore.totalPages)" v-if="todoStore.page < todoStore.totalPages-1">{{todoStore.totalPages}}</div>
+          <div class="page" @click="changePage(todoStore.page + 1)" v-if="todoStore.page <todoStore.totalPages">Вперед </div>
         </div>
 
-        <!-- <div v-for="oneUser in todoStore.users" v-if="userCardEdit" class="user-block">
-          <div class="user-section block" style="width:50%">
-                <div>
-                  <h4 style="margin:7px; display:inline;">Аватар</h4>
-                <my-input @change="onFileSelected" type="file" id="file" class="avatar-img" name="photo"
-                />
-                </div>
-                <img class="img-edit" :src="oneUser.avatar?.url" alt="avatar"/>
-              </div>
-          
-          <div class="user-section inf" style="width:40%" >
-            <div style="margin:0">
-              <h4>Имя:</h4>
-              <my-input v-model="oneUser.first_name " class="inputEdit"/></div>
-            <div style="margin:0">
-              <h4>Фамилия:</h4> 
-              <my-input v-model="oneUser.last_name " class="inputEdit" /></div>
-            <div style="margin:0">
-              <h4>Отчество: </h4>
-              <my-input v-model="oneUser.middle_name " class="inputEdit" /></div>
-            <div style="margin:0">
-              <h4>День рождения:</h4>
-              <my-input v-model="oneUser.birthday " class="inputEdit" /></div>
-            <div style="margin:0">
-              <h4>Должность:</h4>
-              <my-input v-model="oneUser.position " class="inputEdit"/></div>
-            <div style="margin:0">
-              <h4>Страна:</h4> 
-              <my-input v-model="oneUser.location " class="inputEdit"/></div>
-            <div style="margin:0">
-              <h4>Телеграм:</h4>
-              <my-input v-model="oneUser.telegram " class="inputEdit"/></div>
-            <div style="margin:0">
-              <h4>Номер:</h4>
-              <my-input v-model="oneUser.phone " class="inputEdit"/></div>
-            <div style="margin:0">
-              <h4>Почта:</h4>
-              <my-input v-model="oneUser.email " class="inputEdit"/></div>
-              <br>
-            <div>
-              <button class="btn" @click.prevent="todoStore.deleteUser(oneUser.id)">Удалить</button>
-            <button class="btn" @click.prevent="todoStore.editUser(oneUser.id)">Сохранить</button>
-            <button class="btn" @click.prevent="backUser(oneUser.id)">Назад</button>
-            </div>
-          </div> -->
-        <!-- </div> -->
+        <!-- <div
+            v-for="pageNum in todoStore.totalPages"
+            :key="pageNum"
+            class="page"
+            :class="{'current-page': todoStore.page === pageNum}"
+            @click="changePage(pageNum)">
+          {{ pageNum }}
+        </div> -->
       </div>
-      <div
-          v-for="pageNum in todoStore.totalPages"
-          :key="pageNum"
-          class="page"
-          :class="{'current-page': todoStore.page === pageNum}"
-          @click="changePage(pageNum)">
-        {{ pageNum }}
-      </div>
+ 
 
     </div>
 
@@ -166,7 +134,7 @@ import { onMounted} from 'vue';
 
 const todoStore = useTodoStore()
 const updateUser = onMounted(() => {
-  todoStore.getAllUsers
+  todoStore.getAllUsers()
 })
 
 const onFileSelected = (event) =>
@@ -175,7 +143,7 @@ const onFileSelected = (event) =>
 
 const changePage = (pageNum)=>{
     todoStore.page = pageNum
-    todoStore.getAllUsers
+    todoStore.getAllUsers()
 }
 
 const dialogVisiable = () => {
@@ -186,17 +154,6 @@ const dialogUnvisiable = () => {
   todoStore.show = false
 }
 
-// const userCard = ref(true)
-// const userCardEdit = ref(false)
-
-// const edit = () => {
-//   userCard.value = false;
-//   userCardEdit.value = true
-// }
-// const backUser = () => {
-//   userCard.value = true;
-//   userCardEdit.value = false
-// }
 
 </script>
 <script>
@@ -326,7 +283,7 @@ label {
 .user-block {
   margin: 10px 10px;
   width: 48%;
-  height: 500px;
+  /* height: 500px; */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -362,6 +319,11 @@ h4 {
   padding: 10px;
   border: 1px solid black;
   border-radius: 15px;
+  cursor: pointer;
+
+}
+.page:hover{
+  background-color: #286da115;
 }
 .current-page{
   background-color: #2376b6;
@@ -390,5 +352,15 @@ h4 {
   padding: 10px;
   border-radius: 20px;
   width: 80%;
+}
+.page-block{
+  padding: 50px 0;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+}
+.change-page{
+  margin: 0;
 }
 </style>
