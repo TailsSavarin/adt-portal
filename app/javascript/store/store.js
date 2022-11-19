@@ -188,8 +188,6 @@ export const useAuthUser = defineStore({
         localStorage.setItem('token',response.data.access )
         if (localStorage.getItem('token')){
           this.isAuthenticated = true
-
-          
          return true
         }
         

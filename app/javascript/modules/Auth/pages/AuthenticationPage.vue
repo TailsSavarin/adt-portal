@@ -68,8 +68,8 @@ const route = useRoute();
 
 
 
-const submitResult = () => {
-  if (authUser.handleSubmit()){
+const submitResult = async() => {
+  if (await authUser.handleSubmit()){
     router.push('/') 
   }
 }
