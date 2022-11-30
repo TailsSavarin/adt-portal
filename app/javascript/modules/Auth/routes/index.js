@@ -1,17 +1,13 @@
-
 export const auth = [
   {
     path: '/login',
     name: 'Login',
-  
     component: () => import('@/modules/Auth/pages/AuthenticationPage.vue'),
-
   },
   {
     path: '/',
     name: 'Main',
     component: () => import('@/modules/Auth/pages/Main.vue'),
-       
   },
   {
     path: '/profile',
@@ -36,7 +32,7 @@ export const auth = [
   { 
     path: '/:pathMatch(.*)*', 
     name: '404', 
-    component: () => import('@/modules/Auth/pages/NotFound.vue') , 
+    component: () => import('@/modules/Auth/pages/NotFound.vue'), 
   },
-]
+];
 

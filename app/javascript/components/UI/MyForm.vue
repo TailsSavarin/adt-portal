@@ -1,12 +1,13 @@
 <template>
-    <form>
-        <slot></slot>
-    </form>
+  <form>
+    <slot></slot>
+  </form>
 </template>
+
 <script>
   export default {
-    name: 'my-form'
-  }
+    name: 'MyForm'
+  };
 </script>
 <style scoped>
 form {
@@ -23,11 +24,9 @@ form {
   transition: all 0.5s ease;
   box-shadow: 3px 3px 3px rgba(128, 128, 128, 0.212);
 }
-
 form:hover {
   background: rgba(0, 0, 0, 0.041);
   border: 1px solid rgba(0, 0, 0, 0.158);
   transition: all 0.5s ease;
 }
-
 </style>
