@@ -11,8 +11,8 @@ default: &default
 
 development:
   <<: *default
-  database: adt_portal_development
+  database: nasa_portal_development
 
 test:
   <<: *default
-  database: adt_portal_test
+  database: nasa_portal_test
