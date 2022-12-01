@@ -10,17 +10,16 @@
 A simple example of a user's personal account, which contains:
 
 ### Login page with moving icons
-![Login]()
+![Login](https://github.com/Eelllllyy/nasa-portal/blob/main/app/assets/images/login.png)
 ### Main page with actions
-![Main]()
+![Main](https://github.com/Eelllllyy/nasa-portal/blob/main/app/assets/images/main.png)
 
 ### Page with information about the user, as well as the ability to edit it
-![Profile]()
-![Edit]()
+![Profile](https://github.com/Eelllllyy/nasa-portal/blob/main/app/assets/images/profile.png)
+![Edit](https://github.com/Eelllllyy/nasa-portal/blob/main/app/assets/images/edit.png)
 
 ### Page with pagination by buttons and dynamic
-![users-1]()
-![users-2]()
+![users](https://github.com/Eelllllyy/nasa-portal/blob/main/app/assets/images/users.png)
 
 ## In project uses REST API:
 
@@ -42,7 +41,6 @@ A simple example of a user's personal account, which contains:
 
     #DELETE /api/user/users/{id}
 
-###### by Elina Rezenkova
 _Creation date:_
 >10 / 11 / 2022
 
