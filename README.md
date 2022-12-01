@@ -118,7 +118,7 @@ _Creation date:_
 
 ## Запуск (локально)
 
-1. Запустить приложение `foreman s -f Procfile.dev` (предварительно установив [foreman](https://github.com/ddollar/foreman) с помощью `gem install foreman`)
+1. Запустить приложение `foreman s -f Procfile` (предварительно установив [foreman](https://github.com/ddollar/foreman) с помощью `gem install foreman`)
 
 ## Тестирование
 
